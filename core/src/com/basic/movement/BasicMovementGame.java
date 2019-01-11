@@ -3,35 +3,71 @@ package com.basic.movement;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class BasicMovementGame extends Game {
-    private SpriteBatch batch;
+    private static final int ANCHO = 56;
+    private static final int ALTO = 21;
+    public SpriteBatch batch;
 
     private Texture brendanTexture;
     private Sprite brendanSprite;
 
     private int tileSize;
 
+    private Screen brendan;
+    private TextureRegion brendanRegion;
+    private TextureRegion[] brendanFrames;
+    private Animation<TextureRegion> brendanAnimation;
+
     @Override
     public void create() {
         batch = new SpriteBatch();
 
-        brendanTexture = new Texture("brendan/standing/front.png");
+        /*brendanTexture = new Texture("brendan/standing/front.png");
 
         brendanSprite = new Sprite(brendanTexture);
         brendanSprite.setPosition(50, 50);
         tileSize = 5;
+        */
+
+        //brendan = new AnimationScreen(this);
+        //setScreen(brendan);
+
+        brendanTexture = new Texture("brendan/walking/front.png");
+        brendanRegion = new TextureRegion(brendanTexture, ANCHO, ALTO);
+        TextureRegion[][] temp = brendanRegion.split(ANCHO / 4, ALTO);
+
+        brendanFrames = new TextureRegion[temp.length * temp[0].length];
+
+        int index = 0;
+
+        for (int i = 0; i < temp.length; i++) {
+            for (int j = 0; j < temp[i].length; j++) {
+                brendanFrames[index++] = temp[i][j];
+            }
+        }
+
+        brendanAnimation = new Animation<TextureRegion>(1f, brendanFrames);
     }
+
+    private float delta = 0;
 
     @Override
     public void render() {
-        renderAssets();
+        Gdx.gl.glClearColor(0.6f, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.begin();
 
-        manageInputs();
+        delta += 0.5;
+        batch.draw(brendanAnimation.getKeyFrame(delta, true), 100, 100);
+        batch.end();
     }
 
     private void renderAssets() {
