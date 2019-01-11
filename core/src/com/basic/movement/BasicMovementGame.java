@@ -1,6 +1,6 @@
 package com.basic.movement;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
@@ -8,12 +8,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class BasicMovementGame extends ApplicationAdapter {
+public class BasicMovementGame extends Game {
     private SpriteBatch batch;
 
-    private Texture standingTexture;
-    private Texture runningTexture;
-
+    private Texture brendanTexture;
     private Sprite brendanSprite;
 
     private int tileSize;
@@ -22,10 +20,9 @@ public class BasicMovementGame extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
 
-        standingTexture = new Texture("brendan/standing/front.png");
-        runningTexture = new Texture("brendan/running/front 0.png");
+        brendanTexture = new Texture("brendan/standing/front.png");
 
-        brendanSprite = new Sprite(runningTexture);
+        brendanSprite = new Sprite(brendanTexture);
         brendanSprite.setPosition(50, 50);
         tileSize = 5;
     }
@@ -46,8 +43,6 @@ public class BasicMovementGame extends ApplicationAdapter {
     }
 
     private void manageInputs() {
-        float x = brendanSprite.getX(), y = brendanSprite.getY();
-
         boolean up = Gdx.input.isKeyPressed(Input.Keys.UP);
         boolean down = Gdx.input.isKeyPressed(Input.Keys.DOWN);
         boolean right = Gdx.input.isKeyPressed(Input.Keys.RIGHT);
@@ -56,29 +51,31 @@ public class BasicMovementGame extends ApplicationAdapter {
         boolean bButton = Gdx.input.isKeyPressed(Input.Keys.X);
 
         if (bButton) {
-            brendanSprite.setTexture(runningTexture);
-
-            if (up && !down && !left && !right) {
-                y += tileSize * 1.5;
-            } else if (!up && down && !left && !right) {
-                y -= tileSize * 1.5;
-            } else if (!up && !down && left && !right) {
-                x -= tileSize * 1.5;
-            } else if (!up && !down && !left && right) {
-                x += tileSize * 1.5;
-            }
+            run(up, down, right, left);
         } else {
-            brendanSprite.setTexture(standingTexture);
+            walk(up, down, right, left);
+        }
+    }
 
-            if (up && !down && !left && !right) {
-                y += tileSize;
-            } else if (!up && down && !left && !right) {
-                y -= tileSize;
-            } else if (!up && !down && left && !right) {
-                x -= tileSize;
-            } else if (!up && !down && !left && right) {
-                x += tileSize;
-            }
+    private void walk(boolean up, boolean down, boolean right, boolean left) {
+        move(up, down, right, left, 1, "walking");
+    }
+
+    private void run(boolean up, boolean down, boolean right, boolean left) {
+        move(up, down, right, left, 1.5f, "running");
+    }
+
+    private void move(boolean up, boolean down, boolean right, boolean left, float modifier, String mode) {
+        float x = brendanSprite.getX(), y = brendanSprite.getY();
+
+        if (up && !down && !left && !right) {
+            y += tileSize * modifier;
+        } else if (!up && down && !left && !right) {
+            y -= tileSize * modifier;
+        } else if (!up && !down && left && !right) {
+            x -= tileSize * modifier;
+        } else if (!up && !down && !left && right) {
+            x += tileSize * modifier;
         }
 
         brendanSprite.setPosition(x, y);
@@ -87,7 +84,7 @@ public class BasicMovementGame extends ApplicationAdapter {
     @Override
     public void dispose() {
         batch.dispose();
-        standingTexture.dispose();
-        runningTexture.dispose();
+
+        brendanTexture.dispose();
     }
 }
