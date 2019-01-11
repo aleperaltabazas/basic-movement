@@ -4,17 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class AnimationScreen extends GameScreen {
-    private Texture brendanTexture;
-    private TextureRegion brendanRegion;
-    private TextureRegion[] brendanFrames;
-    private Animation<TextureRegion> brendanAnimation;
-    private int duration = 0;
+public class AnimationScreen extends AbstractScreen {
+    private static final int ANCHO = 56;
+    private static final int ALTO = 21;
 
-    private final int ALTO = 21;
-    private final int ANCHO = 56;
+    private TextureAtlas atlas;
+    private TextureRegion[] walkingFrames;
+    private Animation<TextureRegion> walkingAnimation;
+
+    private TextureRegion brendanRegion;
+
+    private float duration = 0;
 
     public AnimationScreen(BasicMovementGame game) {
         super(game);
@@ -22,21 +25,22 @@ public class AnimationScreen extends GameScreen {
 
     @Override
     public void show() {
-        brendanTexture = new Texture("brendan/walking/front.png");
-        brendanRegion = new TextureRegion(brendanTexture, ANCHO, ALTO);
-        TextureRegion[][] temp = brendanRegion.split(ANCHO / 4, ALTO);
+        atlas = new TextureAtlas("output/atlas.atlas");
 
-        brendanFrames = new TextureRegion[temp.length * temp[0].length];
+        TextureRegion region = atlas.findRegion("front");
+        brendanRegion = new TextureRegion(region, 0, 0, ANCHO, ALTO);
+
+        TextureRegion[][] temp = brendanRegion.split(ANCHO / 4, ALTO);
+        walkingFrames = new TextureRegion[temp.length * temp[0].length];
 
         int index = 0;
-
         for (int i = 0; i < temp.length; i++) {
             for (int j = 0; j < temp[i].length; j++) {
-                brendanFrames[index++] = temp[i][j];
+                walkingFrames[index++] = temp[i][j];
             }
         }
 
-        brendanAnimation = new Animation<TextureRegion>(1f, brendanFrames);
+        walkingAnimation = new Animation<TextureRegion>(0.16f, walkingFrames);
     }
 
     @Override
@@ -45,10 +49,10 @@ public class AnimationScreen extends GameScreen {
         Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
 
         duration += delta;
-        TextureRegion frame = brendanAnimation.getKeyFrame(duration, true);
+        TextureRegion frame = walkingAnimation.getKeyFrame(duration, true);
 
         game.batch.begin();
-        game.batch.draw(frame, 100, 100);
+        game.batch.draw(frame, Gdx.graphics.getHeight() / 2, Gdx.graphics.getWidth() / 2);
         game.batch.end();
     }
 }
