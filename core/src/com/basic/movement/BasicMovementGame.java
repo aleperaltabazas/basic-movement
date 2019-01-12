@@ -1,8 +1,7 @@
 package com.basic.movement;
 
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class BasicMovementGame extends Game {
     private static final int ANCHO = 56;
