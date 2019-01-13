@@ -26,30 +26,49 @@ public class Brendan extends Sprite {
     private static final int TILE_WIDTH = 16;
     private static final int TILE_HEIGHT = 16;
 
-    private static final int WIDTH = 56;
-    private static final int HEIGHT = 21;
+    private static final int WALKING_WIDTH = 56;
+    private static final int WALKING_HEIGHT = 21;
+
+    private static final int RUNNING_WIDTH = 60;
+    private static final int RUNNING_HEIGHT = 20;
+
+    private static final int STANDING_WIDTH = 14;
+    private static final int STANDING_HEIGHT = 21;
 
     private enum Direction {
         North {
             public TextureRegion getKeyFrame(Brendan brendan) {
-                return brendan.walkingNorth.getKeyFrame(brendan.stateTimer, true);
+                return getKeyFrame(brendan, brendan.walkingNorth, brendan.runningNorth, brendan.standingNorth);
             }
         },
         South {
             public TextureRegion getKeyFrame(Brendan brendan) {
-                return brendan.walkingSouth.getKeyFrame(brendan.stateTimer, true);
+                return getKeyFrame(brendan, brendan.walkingSouth, brendan.runningSouth, brendan.standingSouth);
             }
         },
         West {
             public TextureRegion getKeyFrame(Brendan brendan) {
-                return brendan.walkingWest.getKeyFrame(brendan.stateTimer, true);
+                return getKeyFrame(brendan, brendan.walkingWest, brendan.runningWest, brendan.standingWest);
             }
         },
         East {
             public TextureRegion getKeyFrame(Brendan brendan) {
-                return brendan.walkingEast.getKeyFrame(brendan.stateTimer, true);
+                return getKeyFrame(brendan, brendan.walkingEast, brendan.runningEast, brendan.standingEast);
             }
         };
+
+        TextureRegion getKeyFrame(Brendan brendan, Animation<TextureRegion> walking, Animation<TextureRegion> running, TextureRegion standing) {
+            switch (brendan.state) {
+                case Standing:
+                    return standing;
+                case Walking:
+                    return walking.getKeyFrame(brendan.stateTimer, true);
+                case Running:
+                    return running.getKeyFrame(brendan.stateTimer, true);
+                default:
+                    throw new RuntimeException("Should not be null");
+            }
+        }
 
         public abstract TextureRegion getKeyFrame(Brendan brendan);
     }
@@ -60,6 +79,7 @@ public class Brendan extends Sprite {
         Running
     }
 
+    private State state;
     private Direction direction;
     private float stateTimer;
 
@@ -69,11 +89,22 @@ public class Brendan extends Sprite {
 
         stateTimer = 0;
         direction = Direction.South;
+        state = State.Standing;
 
-        walkingSouth = fillFromAtlas("south", WIDTH, 4, HEIGHT, 1);
-        walkingNorth = fillFromAtlas("north", WIDTH, 4, HEIGHT, 1);
-        walkingWest = fillFromAtlas("west", WIDTH, 4, HEIGHT, 1);
-        walkingEast = fillFromAtlas("east", WIDTH, 4, HEIGHT, 1);
+        walkingSouth = fillFromAtlas("walking/south", WALKING_WIDTH, 4, WALKING_HEIGHT, 1);
+        walkingNorth = fillFromAtlas("walking/north", WALKING_WIDTH, 4, WALKING_HEIGHT, 1);
+        walkingWest = fillFromAtlas("walking/west", WALKING_WIDTH, 4, WALKING_HEIGHT, 1);
+        walkingEast = fillFromAtlas("walking/east", WALKING_WIDTH, 4, WALKING_HEIGHT, 1);
+
+        runningSouth = fillFromAtlas("running/south", RUNNING_WIDTH, 4, RUNNING_HEIGHT, 1);
+        runningNorth = fillFromAtlas("running/north", RUNNING_WIDTH, 4, RUNNING_HEIGHT, 1);
+        runningWest = fillFromAtlas("running/west", RUNNING_WIDTH, 4, RUNNING_HEIGHT, 1);
+        runningEast = fillFromAtlas("running/east", RUNNING_WIDTH, 4, RUNNING_HEIGHT, 1);
+
+        standingSouth = screen.getAtlas().findRegion("standing/south");
+        standingNorth = screen.getAtlas().findRegion("standing/north");
+        standingWest = screen.getAtlas().findRegion("standing/west");
+        standingEast = screen.getAtlas().findRegion("standing/east");
     }
 
     private Animation<TextureRegion> fillFromAtlas(String regionName, int width, int columns, int height, int rows) {

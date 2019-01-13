@@ -25,11 +25,11 @@ public class AnimationScreen extends AbstractScreen {
 
     @Override
     public void show() {
-        walkingAnimation = renderFromAtlas("front");
+        walkingAnimation = renderFromAtlas("walking/south");
     }
 
     private Animation<TextureRegion> renderFromAtlas(String regionName) {
-        atlas = new TextureAtlas("output/atlas.atlas");
+        atlas = new TextureAtlas("output/brendan.atlas");
         TextureRegion region = atlas.findRegion(regionName);
         brendanRegion = new TextureRegion(region, 0, 0, ANCHO, ALTO);
 
@@ -67,16 +67,16 @@ public class AnimationScreen extends AbstractScreen {
         boolean right = Gdx.input.isKeyPressed(Input.Keys.RIGHT);
 
         if (up && !down && !left && !right) {
-            walkingAnimation = renderFromAtlas("back");
+            walkingAnimation = renderFromAtlas("walking/north");
             y += 1;
         } else if (!up && down && !left && !right) {
-            walkingAnimation = renderFromAtlas("front");
+            walkingAnimation = renderFromAtlas("walking/south");
             y -= 1;
         } else if (!up && !down && left && !right) {
-            walkingAnimation = renderFromAtlas("left");
+            walkingAnimation = renderFromAtlas("walking/west");
             x -= 1;
         } else if (!up && !down && !left && right) {
-            walkingAnimation = renderFromAtlas("right");
+            walkingAnimation = renderFromAtlas("walking/east");
             x += 1;
         }
     }

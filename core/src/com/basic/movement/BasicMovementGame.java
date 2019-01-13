@@ -11,7 +11,7 @@ public class BasicMovementGame extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        brendan = new MovementScreen(this, "output/atlas.atlas");
+        brendan = new MovementScreen(this, "output/brendan.atlas");
         setScreen(brendan);
     }
 
