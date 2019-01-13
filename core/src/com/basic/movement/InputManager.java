@@ -9,6 +9,7 @@ public class InputManager {
     private boolean moving = false;
 
     private Direction direction = Direction.DOWN;
+    private boolean movingAtAll;
 
     public boolean isMovingLeft() {
         return movingLeft;
@@ -47,6 +48,14 @@ public class InputManager {
         movingRight = false;
         movingUp = false;
         moving = false;
+    }
+
+    public boolean isMovingAtAll() {
+        return movingAtAll;
+    }
+
+    public void setMovingAtAll(boolean movingAtAll) {
+        this.movingAtAll = movingAtAll;
     }
 
     public enum Direction {

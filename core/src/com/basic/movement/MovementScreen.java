@@ -31,7 +31,6 @@ public class MovementScreen extends AbstractScreen {
     }
 
     private Animation<TextureRegion> renderFromAtlas(String regionName) {
-        atlas = new TextureAtlas("output/atlas.atlas");
         TextureRegion region = atlas.findRegion(regionName);
         brendanRegion = new TextureRegion(region, 0, 0, ANCHO, ALTO);
 
@@ -51,7 +50,9 @@ public class MovementScreen extends AbstractScreen {
 
     @Override
     public void show() {
-        brendan = new Brendan();
+        atlas = new TextureAtlas("output/atlas2.atlas");
+
+        brendan = new Brendan(this);
         brendan.setPosition(100, 100);
 
         manager = new InputManager();
@@ -88,6 +89,8 @@ public class MovementScreen extends AbstractScreen {
             walkingAnimation = renderFromAtlas("back");
             brendan.moveUp();
         }
+
+        brendan.update(delta);
     }
 
     public TextureAtlas getAtlas() {

@@ -1,48 +1,59 @@
 package com.basic.movement;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
 public class Brendan extends Sprite {
-    private float x;
-    private float y;
-    private Texture texture;
+    private AbstractScreen screen;
 
-    private enum State {
-        WALKING,
-        RUNNING,
-        STANDING
-    }
+    private Animation<TextureRegion> walkingUp;
+    private Animation<TextureRegion> walkingDown;
+
+    private static final int WIDTH = 56;
+    private static final int HEIGHT = 21;
 
     private enum Direction {
-        UP,
-        DOWN,
-        RIGHT,
-        LEFT
+        Up {
+
+        },
+        Down {
+
+        };
+
     }
 
-    private State state;
     private Direction direction;
-
-    private Animation<TextureRegion> walking;
-    private Animation<TextureRegion> running;
-    private Animation<TextureRegion> standing;
-
-    TextureAtlas atlas = new TextureAtlas("output/atlas.atlas");
+    private float stateTimer;
 
     public Brendan(AbstractScreen screen) {
-        //TODO: change front to walking_front, etc.
-        super(screen.getAtlas().findRegion("front"));
+        super(new TextureRegion(new Texture("brendan/standing/front.png")));
+        this.screen = screen;
 
-        Array<TextureRegion> frames = new Array<TextureRegion>();
-        for (int i = 1; i < 4; i++) {
-            frames.add(new TextureRegion(getTexture(), i * 14, 0, 14, i * 21));
+        stateTimer = 0;
+        direction = Direction.Down;
+
+        walkingDown = fillFromAtlas("front");
+        walkingUp = fillFromAtlas("back");
+    }
+
+    private Animation<TextureRegion> fillFromAtlas(String regionName) {
+        TextureRegion region = screen.getAtlas().findRegion(regionName);
+        TextureRegion[][] temp = region.split(WIDTH / 4, HEIGHT);
+
+        TextureRegion[] frames = new TextureRegion[temp.length * temp[0].length];
+
+        int index = 0;
+
+        for (int i = 0; i < temp.length; i++) {
+            for (int j = 0; j < temp[i].length; j++) {
+                frames[index++] = temp[i][j];
+            }
         }
 
-        walking = new Animation<TextureRegion>(0.16f, frames);
-        state = State.STANDING;
-        direction = Direction.DOWN;
+        return new Animation<TextureRegion>(0.16f, frames);
     }
 
     public void update(float delta) {
@@ -50,61 +61,34 @@ public class Brendan extends Sprite {
     }
 
     private TextureRegion getFrame(float delta) {
-        switch (state) {
-            case WALKING:
-                return walking.getKeyFrame(delta, true);
-            case RUNNING:
-                return running.getKeyFrame(delta, true);
-            case STANDING:
-                return standing.getKeyFrame(delta, true);
-        }
-        return null;
-    }
+        stateTimer += delta;
 
-    public void moveDown() {
-        setY(getY() - 1);
+        switch (direction) {
+            case Up:
+                return walkingUp.getKeyFrame(stateTimer, true);
+            case Down:
+                return walkingDown.getKeyFrame(stateTimer, true);
+            default:
+                throw new RuntimeException("Should not be null");
+        }
     }
 
     public void moveUp() {
         setY(getY() + 1);
-    }
-
-    public void moveLeft() {
-        setX(getX() - 1);
+        this.direction = Direction.Up;
     }
 
     public void moveRight() {
-        setX(getX() + 1);
-        this.setTexture(new TextureRegion(new Texture("brendan/standing/front.png")).getTexture());
+
     }
 
-    public float getY() {
-        return y;
+    public void moveLeft() {
+
     }
 
-    public void setY(float y) {
-        this.y = y;
-    }
-
-    public float getX() {
-        return x;
-    }
-
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    public void setTexture(Texture texture) {
-        this.texture = texture;
-    }
-
-    public void draw(SpriteBatch batch) {
-        batch.draw(texture, getX(), getY());
-    }
-
-    public void setPosition(float x, float y) {
-        setX(x);
-        setY(y);
+    public void moveDown() {
+        setY(getY() - 1);
+        this.direction = Direction.Down;
     }
 }
 
