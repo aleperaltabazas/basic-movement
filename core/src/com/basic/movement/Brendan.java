@@ -4,13 +4,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Array;
 
 public class Brendan extends Sprite {
     private AbstractScreen screen;
 
     private Animation<TextureRegion> walkingUp;
     private Animation<TextureRegion> walkingDown;
+    private Animation<TextureRegion> walkingLeft;
+    private Animation<TextureRegion> walkingRight;
+
+    private static final int TILE_WIDTH = 16;
+    private static final int TILE_HEIGHT = 16;
 
     private static final int WIDTH = 56;
     private static final int HEIGHT = 21;
@@ -21,7 +25,13 @@ public class Brendan extends Sprite {
         },
         Down {
 
-        };
+        },
+        Left {
+
+        },
+        Right {
+
+        }
 
     }
 
@@ -37,6 +47,8 @@ public class Brendan extends Sprite {
 
         walkingDown = fillFromAtlas("front");
         walkingUp = fillFromAtlas("back");
+        walkingLeft = fillFromAtlas("left");
+        walkingRight = fillFromAtlas("right");
     }
 
     private Animation<TextureRegion> fillFromAtlas(String regionName) {
@@ -68,6 +80,10 @@ public class Brendan extends Sprite {
                 return walkingUp.getKeyFrame(stateTimer, true);
             case Down:
                 return walkingDown.getKeyFrame(stateTimer, true);
+            case Left:
+                return walkingLeft.getKeyFrame(stateTimer, true);
+            case Right:
+                return walkingRight.getKeyFrame(stateTimer, true);
             default:
                 throw new RuntimeException("Should not be null");
         }
@@ -79,11 +95,13 @@ public class Brendan extends Sprite {
     }
 
     public void moveRight() {
-
+        setX(getX() + 1);
+        this.direction = Direction.Right;
     }
 
     public void moveLeft() {
-
+        setX(getX() - 1);
+        this.direction = Direction.Left;
     }
 
     public void moveDown() {
