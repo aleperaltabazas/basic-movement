@@ -70,15 +70,15 @@ public class Brendan extends Sprite {
         stateTimer = 0;
         direction = Direction.South;
 
-        walkingSouth = fillFromAtlas("south");
-        walkingNorth = fillFromAtlas("north");
-        walkingWest = fillFromAtlas("west");
-        walkingEast = fillFromAtlas("east");
+        walkingSouth = fillFromAtlas("south", WIDTH, 4, HEIGHT, 1);
+        walkingNorth = fillFromAtlas("north", WIDTH, 4, HEIGHT, 1);
+        walkingWest = fillFromAtlas("west", WIDTH, 4, HEIGHT, 1);
+        walkingEast = fillFromAtlas("east", WIDTH, 4, HEIGHT, 1);
     }
 
-    private Animation<TextureRegion> fillFromAtlas(String regionName) {
+    private Animation<TextureRegion> fillFromAtlas(String regionName, int width, int columns, int height, int rows) {
         TextureRegion region = screen.getAtlas().findRegion(regionName);
-        TextureRegion[][] temp = region.split(WIDTH / 4, HEIGHT);
+        TextureRegion[][] temp = region.split(width / columns, height / rows);
 
         TextureRegion[] frames = new TextureRegion[temp.length * temp[0].length];
 
@@ -95,6 +95,7 @@ public class Brendan extends Sprite {
 
     public void update(float delta) {
         setRegion(getFrame(delta));
+        setSize(getRegionWidth(), getRegionHeight());
     }
 
     private TextureRegion getFrame(float delta) {
