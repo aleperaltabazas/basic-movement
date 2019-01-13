@@ -6,10 +6,7 @@ public class InputManager {
     private boolean movingUp;
     private boolean movingDown;
 
-    private boolean moving = false;
-
-    private Direction direction = Direction.DOWN;
-    private boolean movingAtAll;
+    private boolean running;
 
     public boolean isMovingLeft() {
         return movingLeft;
@@ -27,42 +24,12 @@ public class InputManager {
         return movingDown;
     }
 
-    public boolean isMoving(Direction direction) {
-        switch (direction) {
-            case DOWN:
-                return movingRight || movingUp || movingLeft;
-            case UP:
-                return movingRight || movingDown || movingLeft;
-            case LEFT:
-                return movingRight || movingDown || movingUp;
-            case RIGHT:
-                return movingLeft || movingDown || movingUp;
-            default:
-                return false;
-        }
+    public boolean isRunning() {
+        return running;
     }
 
-    public void stopMoving() {
-        movingLeft = false;
-        movingDown = false;
-        movingRight = false;
-        movingUp = false;
-        moving = false;
-    }
-
-    public boolean isMovingAtAll() {
-        return movingAtAll;
-    }
-
-    public void setMovingAtAll(boolean movingAtAll) {
-        this.movingAtAll = movingAtAll;
-    }
-
-    public enum Direction {
-        LEFT,
-        RIGHT,
-        UP,
-        DOWN
+    public void setRunning(boolean running) {
+        this.running = running;
     }
 
     public void setMovingLeft(boolean movingLeft) {

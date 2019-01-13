@@ -23,8 +23,10 @@ public class Brendan extends Sprite {
     private TextureRegion standingEast;
     private TextureRegion standingWest;
 
-    private static final int TILE_WIDTH = 16;
-    private static final int TILE_HEIGHT = 16;
+    //TODO: tiles are 16x16
+
+    private static final int TILE_WIDTH = 2;
+    private static final int TILE_HEIGHT = 2;
 
     private static final int WALKING_WIDTH = 56;
     private static final int WALKING_HEIGHT = 21;
@@ -135,24 +137,80 @@ public class Brendan extends Sprite {
         return direction.getKeyFrame(this);
     }
 
-    public void moveUp() {
-        setY(getY() + 1);
+    public void walkNorth() {
+        walk();
         this.direction = Direction.North;
+        moveNorth(1);
     }
 
-    public void moveRight() {
-        setX(getX() + 1);
+    public void walkEast() {
+        walk();
         this.direction = Direction.East;
+        moveEast(1);
     }
 
-    public void moveLeft() {
-        setX(getX() - 1);
+    public void walkWest() {
+        walk();
         this.direction = Direction.West;
+        moveWest(1);
     }
 
-    public void moveDown() {
-        setY(getY() - 1);
+    public void walkSouth() {
+        walk();
         this.direction = Direction.South;
+        moveSouth(1);
+    }
+
+    public void runNorth() {
+        run();
+        this.direction = Direction.North;
+        moveNorth(1.5f);
+    }
+
+    public void runSouth() {
+        run();
+        this.direction = Direction.South;
+        moveSouth(1.5f);
+    }
+
+    public void runEast() {
+        run();
+        this.direction = Direction.East;
+        moveEast(1.5f);
+    }
+
+    public void runWest() {
+        run();
+        this.direction = Direction.West;
+        moveWest(1.5f);
+    }
+
+    private void walk() {
+        this.state = State.Walking;
+    }
+
+    private void run() {
+        this.state = State.Running;
+    }
+
+    public void stop() {
+        this.state = State.Standing;
+    }
+
+    private void moveSouth(float modifier) {
+        setY(getY() - TILE_HEIGHT * modifier);
+    }
+
+    private void moveNorth(float modifier) {
+        setY(getY() + TILE_HEIGHT * modifier);
+    }
+
+    private void moveWest(float modifier) {
+        setX(getX() - TILE_WIDTH * modifier);
+    }
+
+    private void moveEast(float modifier) {
+        setX(getX() + TILE_WIDTH * modifier);
     }
 }
 
