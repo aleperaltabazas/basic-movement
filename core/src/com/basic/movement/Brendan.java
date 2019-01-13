@@ -30,22 +30,22 @@ public class Brendan extends Sprite {
     private static final int HEIGHT = 21;
 
     private enum Direction {
-        Up {
+        North {
             public TextureRegion getKeyFrame(Brendan brendan) {
                 return brendan.walkingNorth.getKeyFrame(brendan.stateTimer, true);
             }
         },
-        Down {
+        South {
             public TextureRegion getKeyFrame(Brendan brendan) {
                 return brendan.walkingSouth.getKeyFrame(brendan.stateTimer, true);
             }
         },
-        Left {
+        West {
             public TextureRegion getKeyFrame(Brendan brendan) {
                 return brendan.walkingWest.getKeyFrame(brendan.stateTimer, true);
             }
         },
-        Right {
+        East {
             public TextureRegion getKeyFrame(Brendan brendan) {
                 return brendan.walkingEast.getKeyFrame(brendan.stateTimer, true);
             }
@@ -64,16 +64,16 @@ public class Brendan extends Sprite {
     private float stateTimer;
 
     public Brendan(AbstractScreen screen) {
-        super(new TextureRegion(new Texture("brendan/standing/front.png")));
+        super(new TextureRegion(new Texture("brendan/standing/south.png")));
         this.screen = screen;
 
         stateTimer = 0;
-        direction = Direction.Down;
+        direction = Direction.South;
 
-        walkingSouth = fillFromAtlas("front");
-        walkingNorth = fillFromAtlas("back");
-        walkingWest = fillFromAtlas("left");
-        walkingEast = fillFromAtlas("right");
+        walkingSouth = fillFromAtlas("south");
+        walkingNorth = fillFromAtlas("north");
+        walkingWest = fillFromAtlas("west");
+        walkingEast = fillFromAtlas("east");
     }
 
     private Animation<TextureRegion> fillFromAtlas(String regionName) {
@@ -105,22 +105,22 @@ public class Brendan extends Sprite {
 
     public void moveUp() {
         setY(getY() + 1);
-        this.direction = Direction.Up;
+        this.direction = Direction.North;
     }
 
     public void moveRight() {
         setX(getX() + 1);
-        this.direction = Direction.Right;
+        this.direction = Direction.East;
     }
 
     public void moveLeft() {
         setX(getX() - 1);
-        this.direction = Direction.Left;
+        this.direction = Direction.West;
     }
 
     public void moveDown() {
         setY(getY() - 1);
-        this.direction = Direction.Down;
+        this.direction = Direction.South;
     }
 }
 
