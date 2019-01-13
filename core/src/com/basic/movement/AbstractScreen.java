@@ -1,6 +1,10 @@
 package com.basic.movement;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public abstract class AbstractScreen implements Screen {
     protected BasicMovementGame game;
@@ -38,4 +42,6 @@ public abstract class AbstractScreen implements Screen {
     public void dispose() {
 
     }
+
+    public abstract TextureAtlas getAtlas();
 }
