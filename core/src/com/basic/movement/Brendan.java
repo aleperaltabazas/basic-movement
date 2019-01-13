@@ -8,10 +8,20 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class Brendan extends Sprite {
     private AbstractScreen screen;
 
-    private Animation<TextureRegion> walkingUp;
-    private Animation<TextureRegion> walkingDown;
-    private Animation<TextureRegion> walkingLeft;
-    private Animation<TextureRegion> walkingRight;
+    private Animation<TextureRegion> walkingNorth;
+    private Animation<TextureRegion> walkingSouth;
+    private Animation<TextureRegion> walkingEast;
+    private Animation<TextureRegion> walkingWest;
+
+    private Animation<TextureRegion> runningNorth;
+    private Animation<TextureRegion> runningSouth;
+    private Animation<TextureRegion> runningEast;
+    private Animation<TextureRegion> runningWest;
+
+    private TextureRegion standingNorth;
+    private TextureRegion standingSouth;
+    private TextureRegion standingEast;
+    private TextureRegion standingWest;
 
     private static final int TILE_WIDTH = 16;
     private static final int TILE_HEIGHT = 16;
@@ -21,18 +31,33 @@ public class Brendan extends Sprite {
 
     private enum Direction {
         Up {
-
+            public TextureRegion getKeyFrame(Brendan brendan) {
+                return brendan.walkingNorth.getKeyFrame(brendan.stateTimer, true);
+            }
         },
         Down {
-
+            public TextureRegion getKeyFrame(Brendan brendan) {
+                return brendan.walkingSouth.getKeyFrame(brendan.stateTimer, true);
+            }
         },
         Left {
-
+            public TextureRegion getKeyFrame(Brendan brendan) {
+                return brendan.walkingWest.getKeyFrame(brendan.stateTimer, true);
+            }
         },
         Right {
+            public TextureRegion getKeyFrame(Brendan brendan) {
+                return brendan.walkingEast.getKeyFrame(brendan.stateTimer, true);
+            }
+        };
 
-        }
+        public abstract TextureRegion getKeyFrame(Brendan brendan);
+    }
 
+    private enum State {
+        Standing,
+        Walking,
+        Running
     }
 
     private Direction direction;
@@ -45,10 +70,10 @@ public class Brendan extends Sprite {
         stateTimer = 0;
         direction = Direction.Down;
 
-        walkingDown = fillFromAtlas("front");
-        walkingUp = fillFromAtlas("back");
-        walkingLeft = fillFromAtlas("left");
-        walkingRight = fillFromAtlas("right");
+        walkingSouth = fillFromAtlas("front");
+        walkingNorth = fillFromAtlas("back");
+        walkingWest = fillFromAtlas("left");
+        walkingEast = fillFromAtlas("right");
     }
 
     private Animation<TextureRegion> fillFromAtlas(String regionName) {
@@ -59,9 +84,9 @@ public class Brendan extends Sprite {
 
         int index = 0;
 
-        for (int i = 0; i < temp.length; i++) {
-            for (int j = 0; j < temp[i].length; j++) {
-                frames[index++] = temp[i][j];
+        for (TextureRegion[] textureRegions : temp) {
+            for (TextureRegion textureRegion : textureRegions) {
+                frames[index++] = textureRegion;
             }
         }
 
@@ -75,18 +100,7 @@ public class Brendan extends Sprite {
     private TextureRegion getFrame(float delta) {
         stateTimer += delta;
 
-        switch (direction) {
-            case Up:
-                return walkingUp.getKeyFrame(stateTimer, true);
-            case Down:
-                return walkingDown.getKeyFrame(stateTimer, true);
-            case Left:
-                return walkingLeft.getKeyFrame(stateTimer, true);
-            case Right:
-                return walkingRight.getKeyFrame(stateTimer, true);
-            default:
-                throw new RuntimeException("Should not be null");
-        }
+        return direction.getKeyFrame(this);
     }
 
     public void moveUp() {
