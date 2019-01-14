@@ -34,9 +34,6 @@ public class Brendan extends Sprite {
     private static final int RUNNING_WIDTH = 60;
     private static final int RUNNING_HEIGHT = 20;
 
-    private static final int STANDING_WIDTH = 14;
-    private static final int STANDING_HEIGHT = 21;
-
     private enum Direction {
         North {
             public TextureRegion getKeyFrame(Brendan brendan) {

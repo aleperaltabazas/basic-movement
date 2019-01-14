@@ -47,7 +47,7 @@ public class BrendanInput extends InputAdapter {
             case Input.Keys.DOWN:
                 manager.setMovingDown(false);
                 return true;
-            case Input.Keys.B:
+            case Input.Keys.X:
                 manager.setRunning(false);
             default:
                 return false;

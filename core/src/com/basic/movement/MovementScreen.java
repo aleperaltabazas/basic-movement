@@ -16,7 +16,7 @@ public class MovementScreen extends AbstractScreen {
 
     private TextureAtlas atlas;
 
-    private Camera camera;
+    private OrthographicCamera camera;
     private ShapeRenderer shaper;
 
     public MovementScreen(BasicMovementGame game, String atlasName) {
@@ -96,5 +96,10 @@ public class MovementScreen extends AbstractScreen {
 
     public TextureAtlas getAtlas() {
         return atlas;
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        camera.setToOrtho(false, width, height);
     }
 }
