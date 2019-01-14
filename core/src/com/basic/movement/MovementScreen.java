@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class MovementScreen extends AbstractScreen {
     private String atlasName;
-    private Brendan brendan;
+    private Player brendan;
     private InputManager manager;
     private BrendanInput input;
 
@@ -30,7 +30,7 @@ public class MovementScreen extends AbstractScreen {
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         shaper = new ShapeRenderer();
 
-        brendan = new Brendan(this);
+        brendan = new Player(this, 56, 21, 60, 21);
         brendan.setPosition(camera.position.x, camera.position.y);
 
         manager = new InputManager();

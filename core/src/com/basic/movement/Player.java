@@ -1,11 +1,10 @@
 package com.basic.movement;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class Brendan extends Sprite {
+public class Player extends Sprite {
     private AbstractScreen screen;
 
     private PlayerTextureMap textureMap;
@@ -15,35 +14,40 @@ public class Brendan extends Sprite {
     private static final int TILE_WIDTH = 2;
     private static final int TILE_HEIGHT = 2;
 
-    private static final int WALKING_WIDTH = 56;
-    private static final int WALKING_HEIGHT = 21;
+    private int WALKING_WIDTH;
+    private int WALKING_HEIGHT;
 
-    private static final int RUNNING_WIDTH = 60;
-    private static final int RUNNING_HEIGHT = 20;
+    private int RUNNING_WIDTH;
+    private int RUNNING_HEIGHT;
 
     private State state;
     private Direction direction;
     private float stateTimer;
 
-    public Brendan(AbstractScreen screen) {
-        super(new TextureRegion(new Texture("brendan/standing/south.png")));
+    public Player(AbstractScreen screen, int WALKING_WIDTH, int WALKING_HEIGHT, int RUNNING_WIDTH, int RUNNING_HEIGHT) {
+        super(screen.getAtlas().findRegion("standing/south"));
         this.screen = screen;
 
         stateTimer = 0;
         direction = Direction.South;
         state = State.Standing;
 
+        this.WALKING_WIDTH = WALKING_WIDTH;
+        this.WALKING_HEIGHT = WALKING_HEIGHT;
+        this.RUNNING_WIDTH = RUNNING_WIDTH;
+        this.RUNNING_HEIGHT = RUNNING_HEIGHT;
+
         textureMap = new PlayerTextureMap();
 
-        textureMap.putWalking(Direction.North, fillFromAtlas("walking/north", WALKING_WIDTH, 4, WALKING_HEIGHT, 1));
-        textureMap.putWalking(Direction.South, fillFromAtlas("walking/south", WALKING_WIDTH, 4, WALKING_HEIGHT, 1));
-        textureMap.putWalking(Direction.West, fillFromAtlas("walking/west", WALKING_WIDTH, 4, WALKING_HEIGHT, 1));
-        textureMap.putWalking(Direction.East, fillFromAtlas("walking/east", WALKING_WIDTH, 4, WALKING_HEIGHT, 1));
+        textureMap.putWalking(Direction.North, fillFromAtlas("walking/north", this.WALKING_WIDTH, 4, this.WALKING_HEIGHT, 1));
+        textureMap.putWalking(Direction.South, fillFromAtlas("walking/south", this.WALKING_WIDTH, 4, this.WALKING_HEIGHT, 1));
+        textureMap.putWalking(Direction.West, fillFromAtlas("walking/west", this.WALKING_WIDTH, 4, this.WALKING_HEIGHT, 1));
+        textureMap.putWalking(Direction.East, fillFromAtlas("walking/east", this.WALKING_WIDTH, 4, this.WALKING_HEIGHT, 1));
 
-        textureMap.putRunning(Direction.South, fillFromAtlas("running/south", RUNNING_WIDTH, 4, RUNNING_HEIGHT, 1));
-        textureMap.putRunning(Direction.North, fillFromAtlas("running/north", RUNNING_WIDTH, 4, RUNNING_HEIGHT, 1));
-        textureMap.putRunning(Direction.West, fillFromAtlas("running/west", RUNNING_WIDTH, 4, RUNNING_HEIGHT, 1));
-        textureMap.putRunning(Direction.East, fillFromAtlas("running/east", RUNNING_WIDTH, 4, RUNNING_HEIGHT, 1));
+        textureMap.putRunning(Direction.South, fillFromAtlas("running/south", this.RUNNING_WIDTH, 4, this.RUNNING_HEIGHT, 1));
+        textureMap.putRunning(Direction.North, fillFromAtlas("running/north", this.RUNNING_WIDTH, 4, this.RUNNING_HEIGHT, 1));
+        textureMap.putRunning(Direction.West, fillFromAtlas("running/west", this.RUNNING_WIDTH, 4, this.RUNNING_HEIGHT, 1));
+        textureMap.putRunning(Direction.East, fillFromAtlas("running/east", this.RUNNING_WIDTH, 4, this.RUNNING_HEIGHT, 1));
 
         textureMap.putStanding(Direction.South, screen.getAtlas().findRegion("standing/south"));
         textureMap.putStanding(Direction.North, screen.getAtlas().findRegion("standing/north"));

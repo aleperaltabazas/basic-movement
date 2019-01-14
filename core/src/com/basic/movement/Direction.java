@@ -5,31 +5,31 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public enum Direction {
     North {
-        public TextureRegion getKeyFrame(Brendan brendan) {
+        public TextureRegion getKeyFrame(Player brendan) {
             PlayerTextureMap textureMap = brendan.getTextureMap();
             return getKeyFrame(brendan, textureMap.getWalking(North), textureMap.getRunning(North), textureMap.getStanding(North));
         }
     },
     South {
-        public TextureRegion getKeyFrame(Brendan brendan) {
+        public TextureRegion getKeyFrame(Player brendan) {
             PlayerTextureMap textureMap = brendan.getTextureMap();
             return getKeyFrame(brendan, textureMap.getWalking(South), textureMap.getRunning(South), textureMap.getStanding(South));
         }
     },
     West {
-        public TextureRegion getKeyFrame(Brendan brendan) {
+        public TextureRegion getKeyFrame(Player brendan) {
             PlayerTextureMap textureMap = brendan.getTextureMap();
             return getKeyFrame(brendan, textureMap.getWalking(West), textureMap.getRunning(West), textureMap.getStanding(West));
         }
     },
     East {
-        public TextureRegion getKeyFrame(Brendan brendan) {
+        public TextureRegion getKeyFrame(Player brendan) {
             PlayerTextureMap textureMap = brendan.getTextureMap();
             return getKeyFrame(brendan, textureMap.getWalking(East), textureMap.getRunning(East), textureMap.getStanding(East));
         }
     };
 
-    TextureRegion getKeyFrame(Brendan brendan, Animation<TextureRegion> walking, Animation<TextureRegion> running, TextureRegion standing) {
+    TextureRegion getKeyFrame(Player brendan, Animation<TextureRegion> walking, Animation<TextureRegion> running, TextureRegion standing) {
         switch (brendan.getState()) {
             case Standing:
                 return standing;
@@ -42,5 +42,5 @@ public enum Direction {
         }
     }
 
-    public abstract TextureRegion getKeyFrame(Brendan brendan);
+    public abstract TextureRegion getKeyFrame(Player brendan);
 }
