@@ -77,7 +77,7 @@ public class Player extends Sprite {
         setSize(getRegionWidth(), getRegionHeight());
     }
 
-    private TextureRegion getFrame(float delta) {
+    public TextureRegion getFrame(float delta) {
         stateTimer += delta;
 
         return direction.getKeyFrame(this);
