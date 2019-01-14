@@ -8,20 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class Brendan extends Sprite {
     private AbstractScreen screen;
 
-    private Animation<TextureRegion> walkingNorth;
-    private Animation<TextureRegion> walkingSouth;
-    private Animation<TextureRegion> walkingEast;
-    private Animation<TextureRegion> walkingWest;
-
-    private Animation<TextureRegion> runningNorth;
-    private Animation<TextureRegion> runningSouth;
-    private Animation<TextureRegion> runningEast;
-    private Animation<TextureRegion> runningWest;
-
-    private TextureRegion standingNorth;
-    private TextureRegion standingSouth;
-    private TextureRegion standingEast;
-    private TextureRegion standingWest;
+    private PlayerTextureMap textureMap;
 
     //TODO: tiles are 16x16
 
@@ -33,50 +20,6 @@ public class Brendan extends Sprite {
 
     private static final int RUNNING_WIDTH = 60;
     private static final int RUNNING_HEIGHT = 20;
-
-    private enum Direction {
-        North {
-            public TextureRegion getKeyFrame(Brendan brendan) {
-                return getKeyFrame(brendan, brendan.walkingNorth, brendan.runningNorth, brendan.standingNorth);
-            }
-        },
-        South {
-            public TextureRegion getKeyFrame(Brendan brendan) {
-                return getKeyFrame(brendan, brendan.walkingSouth, brendan.runningSouth, brendan.standingSouth);
-            }
-        },
-        West {
-            public TextureRegion getKeyFrame(Brendan brendan) {
-                return getKeyFrame(brendan, brendan.walkingWest, brendan.runningWest, brendan.standingWest);
-            }
-        },
-        East {
-            public TextureRegion getKeyFrame(Brendan brendan) {
-                return getKeyFrame(brendan, brendan.walkingEast, brendan.runningEast, brendan.standingEast);
-            }
-        };
-
-        TextureRegion getKeyFrame(Brendan brendan, Animation<TextureRegion> walking, Animation<TextureRegion> running, TextureRegion standing) {
-            switch (brendan.state) {
-                case Standing:
-                    return standing;
-                case Walking:
-                    return walking.getKeyFrame(brendan.stateTimer, true);
-                case Running:
-                    return running.getKeyFrame(brendan.stateTimer, true);
-                default:
-                    throw new RuntimeException("Should not be null");
-            }
-        }
-
-        public abstract TextureRegion getKeyFrame(Brendan brendan);
-    }
-
-    private enum State {
-        Standing,
-        Walking,
-        Running
-    }
 
     private State state;
     private Direction direction;
@@ -90,20 +33,22 @@ public class Brendan extends Sprite {
         direction = Direction.South;
         state = State.Standing;
 
-        walkingSouth = fillFromAtlas("walking/south", WALKING_WIDTH, 4, WALKING_HEIGHT, 1);
-        walkingNorth = fillFromAtlas("walking/north", WALKING_WIDTH, 4, WALKING_HEIGHT, 1);
-        walkingWest = fillFromAtlas("walking/west", WALKING_WIDTH, 4, WALKING_HEIGHT, 1);
-        walkingEast = fillFromAtlas("walking/east", WALKING_WIDTH, 4, WALKING_HEIGHT, 1);
+        textureMap = new PlayerTextureMap();
 
-        runningSouth = fillFromAtlas("running/south", RUNNING_WIDTH, 4, RUNNING_HEIGHT, 1);
-        runningNorth = fillFromAtlas("running/north", RUNNING_WIDTH, 4, RUNNING_HEIGHT, 1);
-        runningWest = fillFromAtlas("running/west", RUNNING_WIDTH, 4, RUNNING_HEIGHT, 1);
-        runningEast = fillFromAtlas("running/east", RUNNING_WIDTH, 4, RUNNING_HEIGHT, 1);
+        textureMap.putWalking(Direction.North, fillFromAtlas("walking/north", WALKING_WIDTH, 4, WALKING_HEIGHT, 1));
+        textureMap.putWalking(Direction.South, fillFromAtlas("walking/south", WALKING_WIDTH, 4, WALKING_HEIGHT, 1));
+        textureMap.putWalking(Direction.West, fillFromAtlas("walking/west", WALKING_WIDTH, 4, WALKING_HEIGHT, 1));
+        textureMap.putWalking(Direction.East, fillFromAtlas("walking/east", WALKING_WIDTH, 4, WALKING_HEIGHT, 1));
 
-        standingSouth = screen.getAtlas().findRegion("standing/south");
-        standingNorth = screen.getAtlas().findRegion("standing/north");
-        standingWest = screen.getAtlas().findRegion("standing/west");
-        standingEast = screen.getAtlas().findRegion("standing/east");
+        textureMap.putRunning(Direction.South, fillFromAtlas("running/south", RUNNING_WIDTH, 4, RUNNING_HEIGHT, 1));
+        textureMap.putRunning(Direction.North, fillFromAtlas("running/north", RUNNING_WIDTH, 4, RUNNING_HEIGHT, 1));
+        textureMap.putRunning(Direction.West, fillFromAtlas("running/west", RUNNING_WIDTH, 4, RUNNING_HEIGHT, 1));
+        textureMap.putRunning(Direction.East, fillFromAtlas("running/east", RUNNING_WIDTH, 4, RUNNING_HEIGHT, 1));
+
+        textureMap.putStanding(Direction.South, screen.getAtlas().findRegion("standing/south"));
+        textureMap.putStanding(Direction.North, screen.getAtlas().findRegion("standing/north"));
+        textureMap.putStanding(Direction.West, screen.getAtlas().findRegion("standing/west"));
+        textureMap.putStanding(Direction.East, screen.getAtlas().findRegion("standing/east"));
     }
 
     private Animation<TextureRegion> fillFromAtlas(String regionName, int width, int columns, int height, int rows) {
@@ -209,5 +154,16 @@ public class Brendan extends Sprite {
     private void moveEast(float modifier) {
         setX(getX() + TILE_WIDTH * modifier);
     }
-}
 
+    public State getState() {
+        return state;
+    }
+
+    public float getStateTimer() {
+        return stateTimer;
+    }
+
+    public PlayerTextureMap getTextureMap() {
+        return textureMap;
+    }
+}
