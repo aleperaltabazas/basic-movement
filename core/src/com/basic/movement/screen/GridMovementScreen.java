@@ -6,12 +6,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.basic.movement.BasicMovementGame;
 import com.basic.movement.player.Player;
+import com.basic.movement.scene.Hud;
 
 public class GridMovementScreen extends AbstractScreen {
 
     private TextureAtlas atlas;
     private Player player;
     private OrthographicCamera camera;
+    private Hud hud;
 
     public GridMovementScreen(BasicMovementGame game) {
         super(game);
@@ -29,6 +31,8 @@ public class GridMovementScreen extends AbstractScreen {
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         player.setPosition(camera.position.x, camera.position.y);
 
+        hud = new Hud(game.getBatch());
+
         Gdx.input.setInputProcessor(player.getKeyboardManager().getInput());
     }
 
@@ -40,10 +44,12 @@ public class GridMovementScreen extends AbstractScreen {
         game.getBatch().begin();
         player.draw(game.getBatch());
         game.getBatch().end();
+        hud.getStage().draw();
 
         manageKeyboard();
 
         player.update(delta);
+        hud.update(player);
     }
 
     private void manageKeyboard() {

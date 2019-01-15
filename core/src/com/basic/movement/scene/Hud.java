@@ -1,21 +1,21 @@
 package com.basic.movement.scene;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.*;
+import com.basic.movement.player.*;
+
+import java.text.DecimalFormat;
 
 public class Hud {
     private Stage stage;
     private Viewport viewport;
 
-    private Integer x;
-    private Integer y;
+    private Float x;
+    private Float y;
 
     private Label xLabel;
     private Label yLabel;
@@ -24,20 +24,29 @@ public class Hud {
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
         stage = new Stage(viewport, batch);
 
-        x = 0;
-        y = 0;
+        x = 0f;
+        y = 0f;
 
         Table table = new Table();
         table.top();
         table.setFillParent(true);
 
-        xLabel = new Label(String.format("%02d", x), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        yLabel = new Label(String.format("%02d", y), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        xLabel = new Label(String.format("%02f", x), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        yLabel = new Label(String.format("%02f", y), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
-        table.add(xLabel).expandX().padTop(10);
+        table.add(xLabel).expandX().padTop(10).padRight(200);
         table.row();
-        table.add(yLabel).expandX().padTop(10);
+        table.add(yLabel).expandX().padTop(10).padRight(200);
 
         stage.addActor(table);
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void update(Player player) {
+        xLabel.setText(String.format("%.2f", x = player.getX()));
+        yLabel.setText(String.format("%.2f", y = player.getY()));
     }
 }

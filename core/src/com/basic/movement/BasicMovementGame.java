@@ -4,7 +4,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.basic.movement.screen.AbstractScreen;
 import com.basic.movement.screen.GridMovementScreen;
-import com.basic.movement.screen.SceneScreen;
 
 public class BasicMovementGame extends Game {
     public SpriteBatch batch;
