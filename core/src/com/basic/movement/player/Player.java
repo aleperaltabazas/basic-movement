@@ -27,14 +27,16 @@ public class Player extends Sprite {
     private Direction direction;
     private float stateTimer;
 
-    private float speed;
+    private float speedX = 0;
+    private float speedY = 0;
     private boolean moving;
+
+    private static final float WALKING_SPEED = 50f;
+    private static final float RUNNING_SPEED = WALKING_SPEED * 2f;
 
     private float targetX;
     private float targetY;
-
-    private boolean movingX;
-    private boolean movingY;
+    private boolean running = false;
 
     public Player(AbstractScreen screen, int walkWidth, int walkHeight, int runWidth, int runHeight) {
         super(screen.getAtlas().findRegion("standing/south"));
@@ -96,51 +98,67 @@ public class Player extends Sprite {
     }
 
     public void walkNorth() {
+        speedX = 0f;
+        speedY = WALKING_SPEED;
+
         walk();
         this.direction = Direction.North;
-        moveNorth(1);
-    }
-
-    public void walkEast() {
-        walk();
-        this.direction = Direction.East;
-        moveEast(1);
-    }
-
-    public void walkWest() {
-        walk();
-        this.direction = Direction.West;
-        moveWest(1);
     }
 
     public void walkSouth() {
+        speedX = 0f;
+        speedY = -WALKING_SPEED;
+
         walk();
         this.direction = Direction.South;
-        moveSouth(1);
+    }
+
+    public void walkEast() {
+        speedX = WALKING_SPEED;
+        speedY = 0f;
+
+        walk();
+        this.direction = Direction.East;
+    }
+
+    public void walkWest() {
+        speedX = -WALKING_SPEED;
+        speedY = 0f;
+
+        walk();
+        this.direction = Direction.West;
     }
 
     public void runNorth() {
+        speedX = 0f;
+        speedY = RUNNING_SPEED;
+
         run();
         this.direction = Direction.North;
-        moveNorth(1.5f);
     }
 
     public void runSouth() {
+        speedX = 0f;
+        speedY = -RUNNING_SPEED;
+
         run();
         this.direction = Direction.South;
-        moveSouth(1.5f);
     }
 
     public void runEast() {
+        speedX = RUNNING_SPEED;
+        speedY = 0f;
+
         run();
         this.direction = Direction.East;
-        moveEast(1.5f);
     }
 
     public void runWest() {
+        speedX = -RUNNING_SPEED;
+        speedY = 0f;
+
         run();
         this.direction = Direction.West;
-        moveWest(1.5f);
     }
 
     private void walk() {
@@ -149,26 +167,6 @@ public class Player extends Sprite {
 
     private void run() {
         this.state = State.Running;
-    }
-
-    public void stop() {
-        this.state = State.Standing;
-    }
-
-    private void moveSouth(float modifier) {
-        setY(getY() - TILE_HEIGHT * modifier);
-    }
-
-    private void moveNorth(float modifier) {
-        setY(getY() + TILE_HEIGHT * modifier);
-    }
-
-    private void moveWest(float modifier) {
-        setX(getX() - TILE_WIDTH * modifier);
-    }
-
-    private void moveEast(float modifier) {
-        setX(getX() + TILE_WIDTH * modifier);
     }
 
     public State getState() {
@@ -183,44 +181,60 @@ public class Player extends Sprite {
         return textureMap;
     }
 
-    public void stop2() {
-        if (Math.abs(speed) > 0.5f)
-            speed *= 0.5f;
+    public void stopMovement() {
+        if (Math.abs(speedX) > 0.5f)
+            speedX *= 0.5f;
         else {
-            speed = 0;
+            speedX = 0;
+        }
+
+        if (Math.abs(speedY) > 0.5f)
+            speedY *= 0.5f;
+        else {
+            speedY = 0;
         }
     }
 
-    public void caminarOeste() {
-        if (speed != -50f)
-            speed = -50f;
-    }
-
-    public void caminarEste() {
-        if (speed != 50f)
-            speed = 50f;
-    }
-
-    public void updatePosition() {
+    public void move() {
         if ((targetX > getX()) && (targetX - getX() > 1)) {
-            caminarEste();
+            if (running)
+                runEast();
+            else
+                walkEast();
         } else if ((targetX < getX()) && (targetX - getX()) < -1) {
-            caminarOeste();
+            if (running)
+                runWest();
+            else
+                walkWest();
+        } else if ((targetY > getY()) && (targetY - getY()) > 1) {
+            if (running)
+                runNorth();
+            else
+                walkNorth();
+        } else if ((targetY < getY()) && (targetY - getY()) < -1) {
+            if (running)
+                runSouth();
+            else
+                walkSouth();
         } else {
-            fullStop();
+            stop();
         }
 
-        float position = getX();
+        float positionX = getX();
+        float positionY = getY();
         float delta = Gdx.graphics.getDeltaTime();
-        position += speed * delta;
-        setX(position);
+        positionX += speedX * delta;
+        positionY += speedY * delta;
+        setPosition(positionX, positionY);
     }
 
-    private void fullStop() {
+    public void stop() {
         targetX = getX();
         targetY = getY();
         moving = false;
-        speed = 0;
+        speedX = 0;
+        speedY = 0;
+        state = State.Standing;
     }
 
     public void setTargetX(float x) {
@@ -237,5 +251,9 @@ public class Player extends Sprite {
 
     public void setTargetY(float y) {
         this.targetY = y;
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
     }
 }

@@ -9,6 +9,9 @@ import com.basic.movement.BasicMovementGame;
 import com.basic.movement.player.Player;
 
 public class GridMovementScreen extends AbstractScreen {
+    private static final float TILE_WIDTH = 16;
+    private static final float TILE_HEIGHT = 16;
+
     private TextureAtlas atlas;
     private Player player;
     private OrthographicCamera camera;
@@ -53,26 +56,30 @@ public class GridMovementScreen extends AbstractScreen {
         boolean north = Gdx.input.isKeyPressed(Input.Keys.UP);
         boolean shouldMoveSouthNorth = (south != north);
 
+        boolean running = Gdx.input.isKeyPressed(Input.Keys.X);
+
         if (!player.isMoving() && souldMoveEastWest) {
             player.setMoving(true);
+            player.setRunning(running);
 
             if (east) {
-                player.setTargetX(player.getX() + 16);
+                player.setTargetX(player.getX() + TILE_WIDTH);
             } else if (west) {
-                player.setTargetX(player.getX() - 16);
+                player.setTargetX(player.getX() - TILE_WIDTH);
             }
         } else if (!player.isMoving() && shouldMoveSouthNorth) {
             player.setMoving(true);
+            player.setRunning(running);
 
             if (north) {
-                player.setTargetY(player.getY() + 16);
+                player.setTargetY(player.getY() + TILE_HEIGHT);
             } else if (south) {
-                player.setTargetY(player.getY() - 16);
+                player.setTargetY(player.getY() - TILE_HEIGHT);
             }
         } else {
-            player.stop2();
+            player.stopMovement();
         }
 
-        player.updatePosition();
+        player.move();
     }
 }
