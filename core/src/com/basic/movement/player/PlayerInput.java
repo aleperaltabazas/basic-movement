@@ -3,10 +3,10 @@ package com.basic.movement.player;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 
-public class BrendanInput extends InputAdapter {
+public class PlayerInput extends InputAdapter {
     private InputManager manager;
 
-    public BrendanInput(InputManager manager) {
+    public PlayerInput(InputManager manager) {
         this.manager = manager;
     }
 

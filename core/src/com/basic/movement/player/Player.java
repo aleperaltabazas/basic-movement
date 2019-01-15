@@ -1,5 +1,6 @@
 package com.basic.movement.player;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -26,7 +27,16 @@ public class Player extends Sprite {
     private Direction direction;
     private float stateTimer;
 
-    public Player(AbstractScreen screen, int WALKING_WIDTH, int WALKING_HEIGHT, int RUNNING_WIDTH, int RUNNING_HEIGHT) {
+    private float speed;
+    private boolean moving;
+
+    private float targetX;
+    private float targetY;
+
+    private boolean movingX;
+    private boolean movingY;
+
+    public Player(AbstractScreen screen, int walkWidth, int walkHeight, int runWidth, int runHeight) {
         super(screen.getAtlas().findRegion("standing/south"));
         this.screen = screen;
 
@@ -34,10 +44,10 @@ public class Player extends Sprite {
         direction = Direction.South;
         state = State.Standing;
 
-        this.WALKING_WIDTH = WALKING_WIDTH;
-        this.WALKING_HEIGHT = WALKING_HEIGHT;
-        this.RUNNING_WIDTH = RUNNING_WIDTH;
-        this.RUNNING_HEIGHT = RUNNING_HEIGHT;
+        this.WALKING_WIDTH = walkWidth;
+        this.WALKING_HEIGHT = walkHeight;
+        this.RUNNING_WIDTH = runWidth;
+        this.RUNNING_HEIGHT = runHeight;
 
         textureMap = new PlayerTextureMap();
 
@@ -171,5 +181,61 @@ public class Player extends Sprite {
 
     public PlayerTextureMap getTextureMap() {
         return textureMap;
+    }
+
+    public void stop2() {
+        if (Math.abs(speed) > 0.5f)
+            speed *= 0.5f;
+        else {
+            speed = 0;
+        }
+    }
+
+    public void caminarOeste() {
+        if (speed != -50f)
+            speed = -50f;
+    }
+
+    public void caminarEste() {
+        if (speed != 50f)
+            speed = 50f;
+    }
+
+    public void updatePosition() {
+        if ((targetX > getX()) && (targetX - getX() > 1)) {
+            caminarEste();
+        } else if ((targetX < getX()) && (targetX - getX()) < -1) {
+            caminarOeste();
+        } else {
+            fullStop();
+        }
+
+        float position = getX();
+        float delta = Gdx.graphics.getDeltaTime();
+        position += speed * delta;
+        setX(position);
+    }
+
+    private void fullStop() {
+        targetX = getX();
+        targetY = getY();
+        moving = false;
+        speed = 0;
+    }
+
+    public void setTargetX(float x) {
+        this.targetX = x;
+    }
+
+    public boolean isMoving() {
+        return moving;
+    }
+
+    public void setMoving(boolean moving) {
+        this.moving = moving;
+    }
+
+    public void setTargetY(float y) {
+        this.targetY = y;
     }
 }

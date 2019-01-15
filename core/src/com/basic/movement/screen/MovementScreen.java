@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.basic.movement.BasicMovementGame;
-import com.basic.movement.player.BrendanInput;
+import com.basic.movement.player.PlayerInput;
 import com.basic.movement.player.InputManager;
 import com.basic.movement.player.Player;
 
@@ -15,7 +15,7 @@ public class MovementScreen extends AbstractScreen {
     private String atlasName;
     private Player brendan;
     private InputManager manager;
-    private BrendanInput input;
+    private PlayerInput input;
 
     private TextureAtlas atlas;
 
@@ -38,7 +38,7 @@ public class MovementScreen extends AbstractScreen {
         brendan.setPosition(camera.position.x, camera.position.y);
 
         manager = new InputManager();
-        input = new BrendanInput(manager);
+        input = new PlayerInput(manager);
 
         Gdx.input.setInputProcessor(input);
     }
