@@ -8,19 +8,19 @@ public class InputManager {
 
     private boolean running;
 
-    public boolean isMovingLeft() {
+    public boolean isMovingWest() {
         return movingLeft;
     }
 
-    public boolean isMovingRight() {
+    public boolean isMovingEast() {
         return movingRight;
     }
 
-    public boolean isMovingUp() {
+    public boolean isMovingNorth() {
         return movingUp;
     }
 
-    public boolean isMovingDown() {
+    public boolean isMovingSouth() {
         return movingDown;
     }
 

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.basic.movement.utils.KeyboardManager;
 import com.basic.movement.utils.PlayerTextureMap;
 import com.basic.movement.screen.AbstractScreen;
 
@@ -11,11 +12,6 @@ public class Player extends Sprite {
     private AbstractScreen screen;
 
     private PlayerTextureMap textureMap;
-
-    //TODO: tiles are 16x16
-
-    private static final int TILE_WIDTH = 2;
-    private static final int TILE_HEIGHT = 2;
 
     private int WALKING_WIDTH;
     private int WALKING_HEIGHT;
@@ -38,6 +34,8 @@ public class Player extends Sprite {
     private float targetY;
     private boolean running = false;
 
+    private KeyboardManager keyboardManager;
+
     public Player(AbstractScreen screen, int walkWidth, int walkHeight, int runWidth, int runHeight) {
         super(screen.getAtlas().findRegion("standing/south"));
         this.screen = screen;
@@ -46,12 +44,16 @@ public class Player extends Sprite {
         direction = Direction.South;
         state = State.Standing;
 
+        targetX = getX();
+        targetY = getY();
+
         this.WALKING_WIDTH = walkWidth;
         this.WALKING_HEIGHT = walkHeight;
         this.RUNNING_WIDTH = runWidth;
         this.RUNNING_HEIGHT = runHeight;
 
         textureMap = new PlayerTextureMap();
+        keyboardManager = new KeyboardManager(16, 16);
 
         textureMap.putWalking(Direction.North, fillFromAtlas("walking/north", this.WALKING_WIDTH, 4, this.WALKING_HEIGHT, 1));
         textureMap.putWalking(Direction.South, fillFromAtlas("walking/south", this.WALKING_WIDTH, 4, this.WALKING_HEIGHT, 1));
@@ -87,6 +89,7 @@ public class Player extends Sprite {
     }
 
     public void update(float delta) {
+        move();
         setRegion(getFrame(delta));
         setSize(getRegionWidth(), getRegionHeight());
     }
@@ -94,7 +97,7 @@ public class Player extends Sprite {
     public TextureRegion getFrame(float delta) {
         stateTimer += delta;
 
-        return direction.getKeyFrame(this);
+        return direction.getFrame(this);
     }
 
     public void walkNorth() {
@@ -255,5 +258,13 @@ public class Player extends Sprite {
 
     public void setRunning(boolean running) {
         this.running = running;
+    }
+
+    public void manageKeyboard() {
+        keyboardManager.manage(this);
+    }
+
+    public KeyboardManager getKeyboardManager() {
+        return this.keyboardManager;
     }
 }

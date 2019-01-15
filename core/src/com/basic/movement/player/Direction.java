@@ -6,31 +6,31 @@ import com.basic.movement.utils.PlayerTextureMap;
 
 public enum Direction {
     North {
-        public TextureRegion getKeyFrame(Player player) {
+        public TextureRegion getFrame(Player player) {
             PlayerTextureMap textureMap = player.getTextureMap();
-            return getKeyFrame(player, textureMap.getWalking(North), textureMap.getRunning(North), textureMap.getStanding(North));
+            return getFrame(player, textureMap.getWalking(North), textureMap.getRunning(North), textureMap.getStanding(North));
         }
     },
     South {
-        public TextureRegion getKeyFrame(Player brendan) {
-            PlayerTextureMap textureMap = brendan.getTextureMap();
-            return getKeyFrame(brendan, textureMap.getWalking(South), textureMap.getRunning(South), textureMap.getStanding(South));
+        public TextureRegion getFrame(Player player) {
+            PlayerTextureMap textureMap = player.getTextureMap();
+            return getFrame(player, textureMap.getWalking(South), textureMap.getRunning(South), textureMap.getStanding(South));
         }
     },
     West {
-        public TextureRegion getKeyFrame(Player brendan) {
-            PlayerTextureMap textureMap = brendan.getTextureMap();
-            return getKeyFrame(brendan, textureMap.getWalking(West), textureMap.getRunning(West), textureMap.getStanding(West));
+        public TextureRegion getFrame(Player player) {
+            PlayerTextureMap textureMap = player.getTextureMap();
+            return getFrame(player, textureMap.getWalking(West), textureMap.getRunning(West), textureMap.getStanding(West));
         }
     },
     East {
-        public TextureRegion getKeyFrame(Player brendan) {
-            PlayerTextureMap textureMap = brendan.getTextureMap();
-            return getKeyFrame(brendan, textureMap.getWalking(East), textureMap.getRunning(East), textureMap.getStanding(East));
+        public TextureRegion getFrame(Player player) {
+            PlayerTextureMap textureMap = player.getTextureMap();
+            return getFrame(player, textureMap.getWalking(East), textureMap.getRunning(East), textureMap.getStanding(East));
         }
     };
 
-    TextureRegion getKeyFrame(Player player, Animation<TextureRegion> walking, Animation<TextureRegion> running, TextureRegion standing) {
+    TextureRegion getFrame(Player player, Animation<TextureRegion> walking, Animation<TextureRegion> running, TextureRegion standing) {
         switch (player.getState()) {
             case Standing:
                 return standing;
@@ -43,5 +43,5 @@ public enum Direction {
         }
     }
 
-    public abstract TextureRegion getKeyFrame(Player brendan);
+    public abstract TextureRegion getFrame(Player brendan);
 }

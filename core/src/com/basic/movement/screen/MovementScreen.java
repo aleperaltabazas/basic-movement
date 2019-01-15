@@ -55,22 +55,22 @@ public class MovementScreen extends AbstractScreen {
         brendan.draw(game.getBatch());
         game.getBatch().end();
 
-        if (manager.isMovingDown()) {
+        if (manager.isMovingSouth()) {
             if (manager.isRunning())
                 brendan.runSouth();
             else
                 brendan.walkSouth();
-        } else if (manager.isMovingLeft()) {
+        } else if (manager.isMovingWest()) {
             if (manager.isRunning())
                 brendan.runWest();
             else
                 brendan.walkWest();
-        } else if (manager.isMovingRight()) {
+        } else if (manager.isMovingEast()) {
             if (manager.isRunning())
                 brendan.runEast();
             else
                 brendan.walkEast();
-        } else if (manager.isMovingUp()) {
+        } else if (manager.isMovingNorth()) {
             if (manager.isRunning())
                 brendan.runNorth();
             else
