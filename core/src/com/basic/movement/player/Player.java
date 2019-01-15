@@ -232,8 +232,7 @@ public class Player extends Sprite {
     }
 
     public void stop() {
-        targetX = getX();
-        targetY = getY();
+        setPosition(targetX, targetY);
         moving = false;
         speedX = 0;
         speedY = 0;
