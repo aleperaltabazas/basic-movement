@@ -1,8 +1,10 @@
-package com.basic.movement;
+package com.basic.movement.player;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.basic.movement.utils.PlayerTextureMap;
+import com.basic.movement.screen.AbstractScreen;
 
 public class Player extends Sprite {
     private AbstractScreen screen;

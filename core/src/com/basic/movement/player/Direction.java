@@ -1,13 +1,14 @@
-package com.basic.movement;
+package com.basic.movement.player;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.basic.movement.utils.PlayerTextureMap;
 
 public enum Direction {
     North {
-        public TextureRegion getKeyFrame(Player brendan) {
-            PlayerTextureMap textureMap = brendan.getTextureMap();
-            return getKeyFrame(brendan, textureMap.getWalking(North), textureMap.getRunning(North), textureMap.getStanding(North));
+        public TextureRegion getKeyFrame(Player player) {
+            PlayerTextureMap textureMap = player.getTextureMap();
+            return getKeyFrame(player, textureMap.getWalking(North), textureMap.getRunning(North), textureMap.getStanding(North));
         }
     },
     South {
@@ -29,14 +30,14 @@ public enum Direction {
         }
     };
 
-    TextureRegion getKeyFrame(Player brendan, Animation<TextureRegion> walking, Animation<TextureRegion> running, TextureRegion standing) {
-        switch (brendan.getState()) {
+    TextureRegion getKeyFrame(Player player, Animation<TextureRegion> walking, Animation<TextureRegion> running, TextureRegion standing) {
+        switch (player.getState()) {
             case Standing:
                 return standing;
             case Walking:
-                return walking.getKeyFrame(brendan.getStateTimer(), true);
+                return walking.getKeyFrame(player.getStateTimer(), true);
             case Running:
-                return running.getKeyFrame(brendan.getStateTimer(), true);
+                return running.getKeyFrame(player.getStateTimer(), true);
             default:
                 throw new RuntimeException("Should not be null");
         }

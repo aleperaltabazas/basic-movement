@@ -1,4 +1,4 @@
-package com.basic.movement;
+package com.basic.movement.player;
 
 public class InputManager {
     private boolean movingLeft;

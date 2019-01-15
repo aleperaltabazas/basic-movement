@@ -1,15 +1,17 @@
-package com.basic.movement;
+package com.basic.movement.player;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.basic.movement.player.Player;
+import com.basic.movement.screen.AbstractScreen;
 
-public class May extends Actor {
+public class ActorPlayer extends Actor {
     private Player sprite;
     private TextureRegion currentFrame;
 
-    public May(AbstractScreen screen) {
+    public ActorPlayer(AbstractScreen screen) {
         sprite = new Player(screen, 56, 20, 64, 20);
 
         currentFrame = new TextureRegion(new Texture("may/standing/south.png"), 14, 20);

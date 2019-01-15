@@ -1,4 +1,4 @@
-package com.basic.movement;
+package com.basic.movement.utils;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;

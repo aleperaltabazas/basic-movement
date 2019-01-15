@@ -1,4 +1,4 @@
-package com.basic.movement;
+package com.basic.movement.player;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;

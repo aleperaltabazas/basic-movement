@@ -1,20 +1,20 @@
-package com.basic.movement;
+package com.basic.movement.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.basic.movement.BasicMovementGame;
+import com.basic.movement.player.ActorPlayer;
+import com.basic.movement.utils.Scenery;
 
 public class SceneScreen extends AbstractScreen {
     private TextureAtlas atlas;
-    private May may;
+    private ActorPlayer may;
     private Stage stage;
     private Scenery scenery;
 
@@ -28,7 +28,7 @@ public class SceneScreen extends AbstractScreen {
         scenery.setSize(stage.getWidth(), stage.getHeight());
         stage.addActor(scenery);
 
-        may = new May(this);
+        may = new ActorPlayer(this);
         may.setColor(Color.RED);
         may.setPosition(100, 100);
 

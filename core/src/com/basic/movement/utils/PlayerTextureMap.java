@@ -1,7 +1,8 @@
-package com.basic.movement;
+package com.basic.movement.utils;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.basic.movement.player.Direction;
 
 import java.util.HashMap;
 import java.util.Map;

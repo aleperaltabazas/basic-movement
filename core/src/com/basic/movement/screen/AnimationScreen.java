@@ -1,8 +1,9 @@
-package com.basic.movement;
+package com.basic.movement.screen;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.basic.movement.BasicMovementGame;
 
 public class AnimationScreen extends AbstractScreen {
     private static final int ANCHO = 56;

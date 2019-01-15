@@ -1,4 +1,4 @@
-package com.basic.movement;
+package com.basic.movement.player;
 
 public enum State {
     Standing,
