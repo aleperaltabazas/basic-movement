@@ -8,8 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.*;
 import com.basic.movement.player.*;
 
-import java.text.DecimalFormat;
-
 public class Hud {
     private Stage stage;
     private Viewport viewport;
@@ -34,9 +32,9 @@ public class Hud {
         xLabel = new Label(String.format("%02f", x), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         yLabel = new Label(String.format("%02f", y), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
-        table.add(xLabel).expandX().padTop(10).padRight(200);
+        table.add(xLabel).expandX().padTop(10).padRight(Gdx.graphics.getWidth() - 100);
         table.row();
-        table.add(yLabel).expandX().padTop(10).padRight(200);
+        table.add(yLabel).expandX().padTop(10).padRight(Gdx.graphics.getWidth() - 100);
 
         stage.addActor(table);
     }
