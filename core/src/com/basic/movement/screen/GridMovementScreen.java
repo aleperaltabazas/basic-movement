@@ -22,8 +22,8 @@ public class GridMovementScreen extends AbstractScreen {
     private TmxMapLoader mapLoader;
     private TiledMap map;
     private OrthogonalTiledMapRenderer mapRenderer;
-
     private ShapeRenderer shaper;
+    private Viewport viewport;
 
     public GridMovementScreen(BasicMovementGame game) {
         super(game);
@@ -37,7 +37,8 @@ public class GridMovementScreen extends AbstractScreen {
     public void show() {
         atlas = new TextureAtlas("output/brendan.atlas");
         player = new Player(this, 56, 21, 60, 21);
-
+        player.setPosition(240, 240);
+        player.setTargetPosition(240, 240);
         camera = new OrthographicCamera(Gdx.graphics.getHeight(), Gdx.graphics.getHeight());
 
         hud = new Hud(game.getBatch());
@@ -46,7 +47,7 @@ public class GridMovementScreen extends AbstractScreen {
         map = mapLoader.load("maps/town.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map);
 
-        //camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
+        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
 
         Gdx.input.setInputProcessor(player.getMovementManager().getInput());
         shaper = new ShapeRenderer();
@@ -56,6 +57,9 @@ public class GridMovementScreen extends AbstractScreen {
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
+
+        mapRenderer.setView(camera);
+        mapRenderer.render();
 
         shaper.setProjectionMatrix(camera.combined);
         shaper.begin(ShapeRenderer.ShapeType.Line);
@@ -81,8 +85,8 @@ public class GridMovementScreen extends AbstractScreen {
         shaper.line(0, -1024, 0, 1024);
 
         for (int i = -1024; i <= 1024; i += 16) {
-            shaper.line(-4, i, 4, i);
-            shaper.line(i, -4, i, 4);
+            shaper.line(-1024, i, 1024, i);
+            shaper.line(i, -1024, i, 1024);
         }
     }
 

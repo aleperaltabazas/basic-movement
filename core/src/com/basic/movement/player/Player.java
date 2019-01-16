@@ -189,6 +189,11 @@ public class Player extends Sprite {
         movementState = new Standing();
     }
 
+    public void setTargetPosition(float targetX, float targetY) {
+        setTargetX(targetX);
+        setTargetY(targetY);
+    }
+
     public void setTargetX(float x) {
         this.targetX = x;
     }
@@ -219,6 +224,11 @@ public class Player extends Sprite {
 
     public void setDirection(Direction direction) {
         this.direction = direction;
+    }
+
+    public void setSpeed(float speedX, float speedY) {
+        setSpeedX(speedX);
+        setSpeedY(speedY);
     }
 
     public void setSpeedX(float speedX) {
