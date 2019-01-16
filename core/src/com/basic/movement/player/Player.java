@@ -268,19 +268,8 @@ public class Player extends Sprite {
         this.speedY = speedY;
     }
 
-    public void setMovementState(MovementState movementState) {
-        this.movementState = movementState;
-    }
-
     public TextureRegion getRegion() {
         return currentTexture;
-    }
-
-    public void printPosition() {
-        System.out.println("Sprite x: " + getX());
-        System.out.println("Sprite y: " + getY());
-        System.out.println("Body x: " + body.getPosition().x);
-        System.out.println("Body y: " + body.getPosition().y);
     }
 
     public Body getBody() {

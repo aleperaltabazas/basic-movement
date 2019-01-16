@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.*;
 import com.basic.movement.*;
 import com.basic.movement.player.*;
 import com.basic.movement.scene.*;
+import com.basic.movement.utils.Box2DWorldCreator;
 import com.basic.movement.utils.OverworldContactListener;
 
 public class GridMovementScreen extends AbstractScreen {
@@ -67,37 +68,13 @@ public class GridMovementScreen extends AbstractScreen {
         debugRenderer.SHAPE_STATIC.set(1, 0, 0, 1);
         debugRenderer.SHAPE_AWAKE.set(0, 0, 1, 1);
 
-        createBodies("walls");
-        createBodies("ocean");
-        createBodies("signs");
-        createBodies("tall grass");
-        createBodies("doors");
+        new Box2DWorldCreator(world, map);
 
         Gdx.input.setInputProcessor(player.getMovementManager().getInput());
         shaper = new ShapeRenderer();
 
         contactListener = new OverworldContactListener();
         world.setContactListener(contactListener);
-    }
-
-    private void createBodies(String objectName) {
-        BodyDef bodyDef = new BodyDef();
-        PolygonShape shape = new PolygonShape();
-        FixtureDef fixtureDef = new FixtureDef();
-        Body body;
-
-        for (MapObject object : map.getLayers().get(objectName).getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
-
-            bodyDef.type = BodyDef.BodyType.StaticBody;
-            bodyDef.position.set(rectangle.getX() + rectangle.getWidth() / 2, rectangle.getY() + rectangle.getHeight() / 2);
-
-            body = world.createBody(bodyDef);
-
-            shape.setAsBox(rectangle.getWidth() / 2, rectangle.getHeight() / 2);
-            fixtureDef.shape = shape;
-            body.createFixture(fixtureDef);
-        }
     }
 
     @Override
@@ -175,5 +152,13 @@ public class GridMovementScreen extends AbstractScreen {
     @Override
     public World getWorld() {
         return this.world;
+    }
+
+    @Override
+    public void dispose() {
+        map.dispose();
+        world.dispose();
+        debugRenderer.dispose();
+        hud.dispose();
     }
 }

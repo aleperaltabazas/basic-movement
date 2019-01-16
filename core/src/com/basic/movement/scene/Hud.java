@@ -5,10 +5,11 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.*;
 import com.basic.movement.player.*;
 
-public class Hud {
+public class Hud implements Disposable {
     private Stage stage;
     private Viewport viewport;
 
@@ -46,5 +47,9 @@ public class Hud {
     public void update(Player player) {
         xLabel.setText(String.format("%.2f", x = player.getX()));
         yLabel.setText(String.format("%.2f", y = player.getY()));
+    }
+
+    public void dispose() {
+        stage.dispose();
     }
 }
