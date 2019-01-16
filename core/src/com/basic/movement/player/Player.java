@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.basic.movement.player.movement.MovementState;
 import com.basic.movement.player.movement.Running;
@@ -81,13 +82,14 @@ public class Player extends Sprite {
 
     private void defineBody() {
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(getX(), getY());
+        bodyDef.position.set(getX() + getWidth() / 2, getY() + getHeight() / 2);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         body = screen.getWorld().createBody(bodyDef);
 
         FixtureDef fixtureDef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(7);
+        shape.setPosition(new Vector2(getX() + getWidth() / 2, getY() + getWidth() / 2));
+        shape.setRadius(getWidth() / 2);
         fixtureDef.shape = shape;
 
         body.createFixture(fixtureDef);
@@ -111,11 +113,9 @@ public class Player extends Sprite {
     }
 
     public void update(float delta) {
-        //move();
+        move();
         setRegion(getFrame(delta));
         setSize(getRegionWidth(), getRegionHeight());
-        //body.setActive(true);
-        //body.setTransform(getX(), getY(), 0);
     }
 
     public TextureRegion getFrame(float delta) {
@@ -179,8 +179,8 @@ public class Player extends Sprite {
             stop();
         }
 
-        float positionX = getX();
-        float positionY = getY();
+        float positionX = body.getPosition().x;
+        float positionY = body.getPosition().y;
         float delta = Gdx.graphics.getDeltaTime();
         positionX += speedX * delta;
         positionY += speedY * delta;
@@ -205,9 +205,8 @@ public class Player extends Sprite {
 
     public void stop() {
         setPosition(targetX, targetY);
+        setSpeed(0, 0);
         moving = false;
-        speedX = 0;
-        speedY = 0;
         movementState = new Standing();
     }
 
@@ -251,6 +250,7 @@ public class Player extends Sprite {
     public void setSpeed(float speedX, float speedY) {
         setSpeedX(speedX);
         setSpeedY(speedY);
+        body.setLinearVelocity(speedX, speedY);
     }
 
     public void setSpeedX(float speedX) {
@@ -278,5 +278,11 @@ public class Player extends Sprite {
 
     public Body getBody() {
         return this.body;
+    }
+
+    @Override
+    public void setPosition(float x, float y) {
+        super.setPosition(x, y);
+        body.setTransform(x, y, 0);
     }
 }

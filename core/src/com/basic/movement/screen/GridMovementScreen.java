@@ -159,14 +159,6 @@ public class GridMovementScreen extends AbstractScreen {
             player.printPosition();
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.getBody().getLinearVelocity().x >= -50) {
-            player.getBody().setLinearVelocity(new Vector2(-50f, 0));
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getBody().getLinearVelocity().x <= 50) {
-            player.getBody().setLinearVelocity(new Vector2(50f, 0));
-        } else if(!Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)){
-            player.getBody().setLinearVelocity(new Vector2(0, 0));
-        }
-
         player.update(delta);
         hud.update(player);
         camera.position.set(player.getX(), player.getY(), 0);

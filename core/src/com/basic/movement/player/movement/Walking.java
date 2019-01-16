@@ -11,38 +11,27 @@ public class Walking implements MovementState {
 
     @Override
     public void moveNorth(Player player) {
-        /*player.setSpeedX(0);
-        player.setSpeedY(SPEED);*/
         player.setDirection(Direction.North);
-        if (player.getBody().getLinearVelocity().y <= 1)
-            player.getBody().applyLinearImpulse(new Vector2(0, 1f), player.getBody().getWorldCenter(), true);
+        player.setSpeed(0, SPEED);
     }
 
     @Override
     public void moveSouth(Player player) {
-        /*player.setSpeedX(0);
-        player.setSpeedY(-SPEED);*/
+
         player.setDirection(Direction.South);
-        if (player.getBody().getLinearVelocity().y <= -1)
-            player.getBody().applyLinearImpulse(new Vector2(0, -1f), player.getBody().getWorldCenter(), true);
+        player.setSpeed(0, -SPEED);
     }
 
     @Override
     public void moveEast(Player player) {
-        /*player.setSpeedX(SPEED);
-        player.setSpeedY(0);*/
         player.setDirection(Direction.East);
-        if (player.getBody().getLinearVelocity().x <= 1)
-            player.getBody().applyLinearImpulse(new Vector2(1f, 0), player.getBody().getWorldCenter(), true);
+        player.setSpeed(SPEED, 0);
     }
 
     @Override
     public void moveWest(Player player) {
-        /*player.setSpeedX(-SPEED);
-        player.setSpeedY(0);*/
         player.setDirection(Direction.West);
-        if (player.getBody().getLinearVelocity().x <= -1)
-            player.getBody().applyLinearImpulse(new Vector2(1f, 0), player.getBody().getWorldCenter(), true);
+        player.setSpeed(-SPEED, 0);
     }
 
     @Override

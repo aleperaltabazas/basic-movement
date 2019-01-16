@@ -10,30 +10,27 @@ public class Running implements MovementState {
 
     @Override
     public void moveNorth(Player player) {
-        player.setSpeedX(0);
-        player.setSpeedY(SPEED);
         player.setDirection(Direction.North);
+        player.setSpeed(0, SPEED);
     }
 
     @Override
     public void moveSouth(Player player) {
-        player.setSpeedX(0);
-        player.setSpeedY(-SPEED);
+
         player.setDirection(Direction.South);
+        player.setSpeed(0, -SPEED);
     }
 
     @Override
     public void moveEast(Player player) {
-        player.setSpeedX(SPEED);
-        player.setSpeedY(0);
         player.setDirection(Direction.East);
+        player.setSpeed(SPEED, 0);
     }
 
     @Override
     public void moveWest(Player player) {
-        player.setSpeedX(-SPEED);
-        player.setSpeedY(0);
         player.setDirection(Direction.West);
+        player.setSpeed(-SPEED, 0);
     }
 
     @Override
