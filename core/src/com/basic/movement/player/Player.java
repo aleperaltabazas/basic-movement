@@ -93,6 +93,13 @@ public class Player extends Sprite {
         fixtureDef.shape = shape;
 
         body.createFixture(fixtureDef);
+
+        EdgeShape head = new EdgeShape();
+        head.set(new Vector2(-2,    7), new Vector2(2, 7));
+        fixtureDef.shape = head;
+        fixtureDef.isSensor = true;
+
+        body.createFixture(fixtureDef).setUserData("head");
     }
 
     private Animation<TextureRegion> fillFromAtlas(String regionName, int width, int columns, int height, int rows) {

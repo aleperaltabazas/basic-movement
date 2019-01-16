@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.*;
 import com.basic.movement.*;
 import com.basic.movement.player.*;
 import com.basic.movement.scene.*;
+import com.basic.movement.utils.OverworldContactListener;
 
 public class GridMovementScreen extends AbstractScreen {
 
@@ -29,6 +30,7 @@ public class GridMovementScreen extends AbstractScreen {
     private OrthogonalTiledMapRenderer mapRenderer;
     private ShapeRenderer shaper;
     private Viewport viewport;
+    private ContactListener contactListener;
 
     private World world;
     private Box2DDebugRenderer debugRenderer;
@@ -63,6 +65,7 @@ public class GridMovementScreen extends AbstractScreen {
 
         debugRenderer = new Box2DDebugRenderer();
         debugRenderer.SHAPE_STATIC.set(1, 0, 0, 1);
+        debugRenderer.SHAPE_AWAKE.set(0, 0, 1, 1);
 
         createBodies("walls");
         createBodies("ocean");
@@ -73,6 +76,8 @@ public class GridMovementScreen extends AbstractScreen {
         Gdx.input.setInputProcessor(player.getMovementManager().getInput());
         shaper = new ShapeRenderer();
 
+        contactListener = new OverworldContactListener();
+        world.setContactListener(contactListener);
     }
 
     private void createBodies(String objectName) {
@@ -155,14 +160,12 @@ public class GridMovementScreen extends AbstractScreen {
 
         world.step(1 / 60f, 6, 2);
 
-        if (Gdx.input.isKeyPressed(Input.Keys.P)) {
-            player.printPosition();
-        }
-
         player.update(delta);
         hud.update(player);
         camera.position.set(player.getX(), player.getY(), 0);
         camera.update();
+
+
     }
 
     private void manageKeyboard() {
