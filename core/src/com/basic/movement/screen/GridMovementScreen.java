@@ -47,7 +47,8 @@ public class GridMovementScreen extends AbstractScreen {
         map = mapLoader.load("maps/town.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map);
 
-        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
+        viewport = new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
+        camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
 
         Gdx.input.setInputProcessor(player.getMovementManager().getInput());
         shaper = new ShapeRenderer();
@@ -58,21 +59,34 @@ public class GridMovementScreen extends AbstractScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
 
-        mapRenderer.setView(camera);
-        mapRenderer.render();
+        renderMap();
+        renderShapes();
+        renderBatch();
+        renderHUD();
 
-        shaper.setProjectionMatrix(camera.combined);
-        shaper.begin(ShapeRenderer.ShapeType.Line);
-        renderAxis();
-        shaper.end();
+        update(delta);
+    }
 
+    private void renderBatch() {
         game.getBatch().setProjectionMatrix(camera.combined);
         game.getBatch().begin();
         player.draw(game.getBatch());
         game.getBatch().end();
-        hud.getStage().draw();
+    }
 
-        update(delta);
+    private void renderHUD() {
+        hud.getStage().draw();
+    }
+
+    private void renderMap() {
+        mapRenderer.setView(camera);
+        mapRenderer.render();
+    }
+
+    private void renderShapes() {
+        shaper.setProjectionMatrix(camera.combined);
+        shaper.begin(ShapeRenderer.ShapeType.Line);
+        shaper.end();
     }
 
     @Override
