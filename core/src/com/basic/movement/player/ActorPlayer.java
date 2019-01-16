@@ -36,6 +36,6 @@ public class ActorPlayer extends Actor {
     }
 
     public void walkNorth() {
-        sprite.walkNorth();
+        sprite.moveNorth();
     }
 }

@@ -19,7 +19,7 @@ public class Player extends Sprite {
     private int RUNNING_WIDTH;
     private int RUNNING_HEIGHT;
 
-    private State state;
+    private MovementState movementState;
     private Direction direction;
     private float stateTimer;
 
@@ -42,7 +42,7 @@ public class Player extends Sprite {
 
         stateTimer = 0;
         direction = Direction.South;
-        state = State.Standing;
+        movementState = new Standing();
 
         targetX = getX();
         targetY = getY();
@@ -71,6 +71,10 @@ public class Player extends Sprite {
         textureMap.putStanding(Direction.East, screen.getAtlas().findRegion("standing/east"));
     }
 
+    public Direction getDirection() {
+        return this.direction;
+    }
+
     private Animation<TextureRegion> fillFromAtlas(String regionName, int width, int columns, int height, int rows) {
         TextureRegion region = screen.getAtlas().findRegion(regionName);
         TextureRegion[][] temp = region.split(width / columns, height / rows);
@@ -97,83 +101,15 @@ public class Player extends Sprite {
     public TextureRegion getFrame(float delta) {
         stateTimer += delta;
 
-        return direction.getFrame(this);
-    }
-
-    public void walkNorth() {
-        speedX = 0f;
-        speedY = WALKING_SPEED;
-
-        walk();
-        this.direction = Direction.North;
-    }
-
-    public void walkSouth() {
-        speedX = 0f;
-        speedY = -WALKING_SPEED;
-
-        walk();
-        this.direction = Direction.South;
-    }
-
-    public void walkEast() {
-        speedX = WALKING_SPEED;
-        speedY = 0f;
-
-        walk();
-        this.direction = Direction.East;
-    }
-
-    public void walkWest() {
-        speedX = -WALKING_SPEED;
-        speedY = 0f;
-
-        walk();
-        this.direction = Direction.West;
-    }
-
-    public void runNorth() {
-        speedX = 0f;
-        speedY = RUNNING_SPEED;
-
-        run();
-        this.direction = Direction.North;
-    }
-
-    public void runSouth() {
-        speedX = 0f;
-        speedY = -RUNNING_SPEED;
-
-        run();
-        this.direction = Direction.South;
-    }
-
-    public void runEast() {
-        speedX = RUNNING_SPEED;
-        speedY = 0f;
-
-        run();
-        this.direction = Direction.East;
-    }
-
-    public void runWest() {
-        speedX = -RUNNING_SPEED;
-        speedY = 0f;
-
-        run();
-        this.direction = Direction.West;
+        return movementState.getFrame(this.textureMap, this.direction, this.stateTimer);
     }
 
     private void walk() {
-        this.state = State.Walking;
+        this.movementState = new Walking();
     }
 
     private void run() {
-        this.state = State.Running;
-    }
-
-    public State getState() {
-        return state;
+        this.movementState = new Running();
     }
 
     public float getStateTimer() {
@@ -201,24 +137,32 @@ public class Player extends Sprite {
     public void move() {
         if ((targetX > getX()) && (targetX - getX() > 1)) {
             if (running)
-                runEast();
+                run();
             else
-                walkEast();
+                walk();
+
+            moveEast();
         } else if ((targetX < getX()) && (targetX - getX()) < -1) {
             if (running)
-                runWest();
+                run();
             else
-                walkWest();
+                walk();
+
+            moveWest();
         } else if ((targetY > getY()) && (targetY - getY()) > 1) {
             if (running)
-                runNorth();
+                run();
             else
-                walkNorth();
+                walk();
+
+            moveNorth();
         } else if ((targetY < getY()) && (targetY - getY()) < -1) {
             if (running)
-                runSouth();
+                run();
             else
-                walkSouth();
+                walk();
+
+            moveSouth();
         } else {
             stop();
         }
@@ -236,7 +180,7 @@ public class Player extends Sprite {
         moving = false;
         speedX = 0;
         speedY = 0;
-        state = State.Standing;
+        movementState = new Standing();
     }
 
     public void setTargetX(float x) {
@@ -266,4 +210,38 @@ public class Player extends Sprite {
     public KeyboardManager getKeyboardManager() {
         return this.keyboardManager;
     }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
+    public void setSpeedX(float speedX) {
+        this.speedX = speedX;
+    }
+
+    public void setSpeedY(float speedY) {
+        this.speedY = speedY;
+    }
+
+    public void setMovementState(MovementState movementState) {
+        this.movementState = movementState;
+    }
+
+    public void moveNorth() {
+        movementState.moveNorth(this);
+    }
+
+    public void moveSouth() {
+        movementState.moveSouth(this);
+    }
+
+    public void moveEast() {
+        movementState.moveEast(this);
+    }
+
+    public void moveWest() {
+        movementState.moveWest(this);
+    }
+
+
 }
