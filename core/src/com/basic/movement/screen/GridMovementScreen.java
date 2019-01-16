@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -22,7 +23,7 @@ public class GridMovementScreen extends AbstractScreen {
     private TiledMap map;
     private OrthogonalTiledMapRenderer mapRenderer;
 
-    private Viewport viewport;
+    private ShapeRenderer shaper;
 
     public GridMovementScreen(BasicMovementGame game) {
         super(game);
@@ -37,8 +38,7 @@ public class GridMovementScreen extends AbstractScreen {
         atlas = new TextureAtlas("output/brendan.atlas");
         player = new Player(this, 56, 21, 60, 21);
 
-        camera = new OrthographicCamera();
-        viewport = new FitViewport(BasicMovementGame.WIDTH, BasicMovementGame.HEIGHT, camera);
+        camera = new OrthographicCamera(Gdx.graphics.getHeight(), Gdx.graphics.getHeight());
 
         hud = new Hud(game.getBatch());
 
@@ -46,9 +46,10 @@ public class GridMovementScreen extends AbstractScreen {
         map = mapLoader.load("maps/town.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map);
 
-        camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
+        //camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
 
         Gdx.input.setInputProcessor(player.getMovementManager().getInput());
+        shaper = new ShapeRenderer();
     }
 
     @Override
@@ -56,13 +57,33 @@ public class GridMovementScreen extends AbstractScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
 
+        shaper.setProjectionMatrix(camera.combined);
+        shaper.begin(ShapeRenderer.ShapeType.Line);
+        renderAxis();
+        shaper.end();
 
+        game.getBatch().setProjectionMatrix(camera.combined);
         game.getBatch().begin();
         player.draw(game.getBatch());
         game.getBatch().end();
         hud.getStage().draw();
 
         update(delta);
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        camera.setToOrtho(false, width, height);
+    }
+
+    private void renderAxis() {
+        shaper.line(-1024, 0, 1024, 0);
+        shaper.line(0, -1024, 0, 1024);
+
+        for (int i = -1024; i <= 1024; i += 16) {
+            shaper.line(-4, i, 4, i);
+            shaper.line(i, -4, i, 4);
+        }
     }
 
     private void update(float delta) {
@@ -72,8 +93,6 @@ public class GridMovementScreen extends AbstractScreen {
         hud.update(player);
         camera.position.set(player.getX(), player.getY(), 0);
         camera.update();
-        mapRenderer.setMap(map);
-        mapRenderer.render();
     }
 
     private void manageKeyboard() {
