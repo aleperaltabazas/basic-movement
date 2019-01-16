@@ -1,22 +1,25 @@
-package com.basic.movement;
+package com.basic.movement.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.basic.movement.BasicMovementGame;
+import com.basic.movement.player.PlayerInput;
+import com.basic.movement.player.InputManager;
+import com.basic.movement.player.Player;
 
 public class MovementScreen extends AbstractScreen {
     private String atlasName;
-    private Brendan brendan;
+    private Player brendan;
     private InputManager manager;
-    private BrendanInput input;
+    private PlayerInput input;
 
     private TextureAtlas atlas;
 
-    private Camera camera;
+    private OrthographicCamera camera;
     private ShapeRenderer shaper;
 
     public MovementScreen(BasicMovementGame game, String atlasName) {
@@ -31,11 +34,11 @@ public class MovementScreen extends AbstractScreen {
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         shaper = new ShapeRenderer();
 
-        brendan = new Brendan(this);
+        brendan = new Player(this, 56, 21, 60, 21);
         brendan.setPosition(camera.position.x, camera.position.y);
 
         manager = new InputManager();
-        input = new BrendanInput(manager);
+        input = new PlayerInput(manager);
 
         Gdx.input.setInputProcessor(input);
     }
@@ -52,14 +55,28 @@ public class MovementScreen extends AbstractScreen {
         brendan.draw(game.getBatch());
         game.getBatch().end();
 
-        if (manager.isMovingDown() && !manager.isMoving(InputManager.Direction.DOWN)) {
-            brendan.moveDown();
-        } else if (manager.isMovingLeft() && !manager.isMoving(InputManager.Direction.LEFT)) {
-            brendan.moveLeft();
-        } else if (manager.isMovingRight() && !manager.isMoving(InputManager.Direction.RIGHT)) {
-            brendan.moveRight();
-        } else if (manager.isMovingUp() && !manager.isMoving(InputManager.Direction.UP)) {
-            brendan.moveUp();
+        if (manager.isMovingSouth()) {
+            if (manager.isRunning())
+                brendan.runSouth();
+            else
+                brendan.walkSouth();
+        } else if (manager.isMovingWest()) {
+            if (manager.isRunning())
+                brendan.runWest();
+            else
+                brendan.walkWest();
+        } else if (manager.isMovingEast()) {
+            if (manager.isRunning())
+                brendan.runEast();
+            else
+                brendan.walkEast();
+        } else if (manager.isMovingNorth()) {
+            if (manager.isRunning())
+                brendan.runNorth();
+            else
+                brendan.walkNorth();
+        } else {
+            brendan.stop();
         }
 
         brendan.update(delta);
@@ -82,5 +99,10 @@ public class MovementScreen extends AbstractScreen {
 
     public TextureAtlas getAtlas() {
         return atlas;
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        camera.setToOrtho(false, width, height);
     }
 }

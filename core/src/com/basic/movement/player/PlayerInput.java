@@ -1,12 +1,12 @@
-package com.basic.movement;
+package com.basic.movement.player;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 
-public class BrendanInput extends InputAdapter {
+public class PlayerInput extends InputAdapter {
     private InputManager manager;
 
-    public BrendanInput(InputManager manager) {
+    public PlayerInput(InputManager manager) {
         this.manager = manager;
     }
 
@@ -25,9 +25,8 @@ public class BrendanInput extends InputAdapter {
             case Input.Keys.DOWN:
                 manager.setMovingDown(true);
                 return true;
-            case Input.Keys.ANY_KEY:
-                manager.setMovingAtAll(true);
-                return true;
+            case Input.Keys.X:
+                manager.setRunning(true);
             default:
                 return false;
         }
@@ -48,6 +47,8 @@ public class BrendanInput extends InputAdapter {
             case Input.Keys.DOWN:
                 manager.setMovingDown(false);
                 return true;
+            case Input.Keys.X:
+                manager.setRunning(false);
             default:
                 return false;
         }

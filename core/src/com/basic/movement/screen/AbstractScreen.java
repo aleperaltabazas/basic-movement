@@ -1,11 +1,13 @@
-package com.basic.movement;
+package com.basic.movement.screen;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.basic.movement.BasicMovementGame;
 
-public abstract class GameScreen implements Screen {
+public abstract class AbstractScreen implements Screen {
     protected BasicMovementGame game;
 
-    public GameScreen(BasicMovementGame game) {
+    public AbstractScreen(BasicMovementGame game) {
         this.game = game;
     }
 
@@ -15,7 +17,7 @@ public abstract class GameScreen implements Screen {
     }
 
     @Override
-    public void render(float delta) {
+    public void resize(int width, int height) {
 
     }
 
@@ -39,8 +41,5 @@ public abstract class GameScreen implements Screen {
 
     }
 
-    @Override
-    public void resize(int width, int height) {
-
-    }
+    public abstract TextureAtlas getAtlas();
 }
