@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.basic.movement.player.Player;
 import com.basic.movement.screen.AbstractScreen;
 
 public class ActorPlayer extends Actor {
@@ -31,7 +30,7 @@ public class ActorPlayer extends Actor {
     @Override
     public void act(float delta) {
         super.act(delta);
-        currentFrame = sprite.getFrame(delta);
+        currentFrame = sprite.getRegion();
         setSize(currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
     }
 

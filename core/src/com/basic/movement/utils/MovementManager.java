@@ -4,7 +4,7 @@ import com.basic.movement.player.InputManager;
 import com.basic.movement.player.Player;
 import com.basic.movement.player.PlayerInput;
 
-public class KeyboardManager {
+public class MovementManager {
     private final float TILE_WIDTH;
     private final float TILE_HEIGHT;
 
@@ -12,7 +12,7 @@ public class KeyboardManager {
 
     private InputManager manager;
 
-    public KeyboardManager(float tileWidth, float tileHeight) {
+    public MovementManager(float tileWidth, float tileHeight) {
         TILE_WIDTH = tileWidth;
         TILE_HEIGHT = tileHeight;
 

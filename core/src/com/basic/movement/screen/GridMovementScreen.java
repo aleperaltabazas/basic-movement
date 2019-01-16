@@ -4,6 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.basic.movement.BasicMovementGame;
 import com.basic.movement.player.Player;
 import com.basic.movement.scene.Hud;
@@ -14,6 +18,9 @@ public class GridMovementScreen extends AbstractScreen {
     private Player player;
     private OrthographicCamera camera;
     private Hud hud;
+    private TmxMapLoader mapLoader;
+    private TiledMap map;
+    private OrthogonalTiledMapRenderer mapRenderer;
 
     public GridMovementScreen(BasicMovementGame game) {
         super(game);
@@ -33,7 +40,13 @@ public class GridMovementScreen extends AbstractScreen {
 
         hud = new Hud(game.getBatch());
 
-        Gdx.input.setInputProcessor(player.getKeyboardManager().getInput());
+        mapLoader = new TmxMapLoader();
+        map = mapLoader.load("maps/town.tmx");
+        mapRenderer = new OrthogonalTiledMapRenderer(map);
+
+        camera.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
+
+        Gdx.input.setInputProcessor(player.getMovementManager().getInput());
     }
 
     @Override
@@ -46,13 +59,19 @@ public class GridMovementScreen extends AbstractScreen {
         game.getBatch().end();
         hud.getStage().draw();
 
+        update(delta);
+    }
+
+    private void update(float delta) {
         manageKeyboard();
 
         player.update(delta);
         hud.update(player);
+        camera.position.set(player.getX(), player.getY(), 0);
+        camera.update();
     }
 
     private void manageKeyboard() {
-        player.manageKeyboard();
+        player.manageMovement();
     }
 }

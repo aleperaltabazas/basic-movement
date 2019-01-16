@@ -1,10 +1,12 @@
-package com.basic.movement.player;
+package com.basic.movement.player.movement;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.basic.movement.player.Direction;
+import com.basic.movement.player.Player;
 import com.basic.movement.utils.PlayerTextureMap;
 
 public class Running implements MovementState {
-    private static final float SPEED = 75f;
+    static final float SPEED = Walking.SPEED * 2f;
 
     @Override
     public void moveNorth(Player player) {

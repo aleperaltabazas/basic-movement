@@ -4,7 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.basic.movement.utils.KeyboardManager;
+import com.basic.movement.player.movement.MovementState;
+import com.basic.movement.player.movement.Running;
+import com.basic.movement.player.movement.Standing;
+import com.basic.movement.player.movement.Walking;
+import com.basic.movement.utils.MovementManager;
 import com.basic.movement.utils.PlayerTextureMap;
 import com.basic.movement.screen.AbstractScreen;
 
@@ -27,14 +31,12 @@ public class Player extends Sprite {
     private float speedY = 0;
     private boolean moving;
 
-    private static final float WALKING_SPEED = 50f;
-    private static final float RUNNING_SPEED = WALKING_SPEED * 2f;
-
     private float targetX;
     private float targetY;
     private boolean running = false;
 
-    private KeyboardManager keyboardManager;
+    private MovementManager movementManager;
+    private TextureRegion currentTexture;
 
     public Player(AbstractScreen screen, int walkWidth, int walkHeight, int runWidth, int runHeight) {
         super(screen.getAtlas().findRegion("standing/south"));
@@ -53,7 +55,7 @@ public class Player extends Sprite {
         this.RUNNING_HEIGHT = runHeight;
 
         textureMap = new PlayerTextureMap();
-        keyboardManager = new KeyboardManager(16, 16);
+        movementManager = new MovementManager(16, 16);
 
         textureMap.putWalking(Direction.North, fillFromAtlas("walking/north", this.WALKING_WIDTH, 4, this.WALKING_HEIGHT, 1));
         textureMap.putWalking(Direction.South, fillFromAtlas("walking/south", this.WALKING_WIDTH, 4, this.WALKING_HEIGHT, 1));
@@ -69,10 +71,6 @@ public class Player extends Sprite {
         textureMap.putStanding(Direction.North, screen.getAtlas().findRegion("standing/north"));
         textureMap.putStanding(Direction.West, screen.getAtlas().findRegion("standing/west"));
         textureMap.putStanding(Direction.East, screen.getAtlas().findRegion("standing/east"));
-    }
-
-    public Direction getDirection() {
-        return this.direction;
     }
 
     private Animation<TextureRegion> fillFromAtlas(String regionName, int width, int columns, int height, int rows) {
@@ -101,7 +99,7 @@ public class Player extends Sprite {
     public TextureRegion getFrame(float delta) {
         stateTimer += delta;
 
-        return movementState.getFrame(this.textureMap, this.direction, this.stateTimer);
+        return currentTexture = movementState.getFrame(this.textureMap, this.direction, this.stateTimer);
     }
 
     private void walk() {
@@ -110,14 +108,6 @@ public class Player extends Sprite {
 
     private void run() {
         this.movementState = new Running();
-    }
-
-    public float getStateTimer() {
-        return stateTimer;
-    }
-
-    public PlayerTextureMap getTextureMap() {
-        return textureMap;
     }
 
     public void stopMovement() {
@@ -175,6 +165,22 @@ public class Player extends Sprite {
         setPosition(positionX, positionY);
     }
 
+    public void moveNorth() {
+        movementState.moveNorth(this);
+    }
+
+    public void moveSouth() {
+        movementState.moveSouth(this);
+    }
+
+    public void moveEast() {
+        movementState.moveEast(this);
+    }
+
+    public void moveWest() {
+        movementState.moveWest(this);
+    }
+
     public void stop() {
         setPosition(targetX, targetY);
         moving = false;
@@ -187,6 +193,10 @@ public class Player extends Sprite {
         this.targetX = x;
     }
 
+    public void setTargetY(float y) {
+        this.targetY = y;
+    }
+
     public boolean isMoving() {
         return moving;
     }
@@ -195,20 +205,16 @@ public class Player extends Sprite {
         this.moving = moving;
     }
 
-    public void setTargetY(float y) {
-        this.targetY = y;
-    }
-
     public void setRunning(boolean running) {
         this.running = running;
     }
 
-    public void manageKeyboard() {
-        keyboardManager.manage(this);
+    public void manageMovement() {
+        movementManager.manage(this);
     }
 
-    public KeyboardManager getKeyboardManager() {
-        return this.keyboardManager;
+    public MovementManager getMovementManager() {
+        return this.movementManager;
     }
 
     public void setDirection(Direction direction) {
@@ -227,21 +233,7 @@ public class Player extends Sprite {
         this.movementState = movementState;
     }
 
-    public void moveNorth() {
-        movementState.moveNorth(this);
+    public TextureRegion getRegion() {
+        return currentTexture;
     }
-
-    public void moveSouth() {
-        movementState.moveSouth(this);
-    }
-
-    public void moveEast() {
-        movementState.moveEast(this);
-    }
-
-    public void moveWest() {
-        movementState.moveWest(this);
-    }
-
-
 }
