@@ -1,17 +1,22 @@
 package com.basic.movement.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.glutils.*;
+import com.badlogic.gdx.maps.Map;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.*;
+import com.badlogic.gdx.maps.tiled.renderers.*;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.*;
-import com.basic.movement.BasicMovementGame;
-import com.basic.movement.player.Player;
-import com.basic.movement.scene.Hud;
+import com.basic.movement.*;
+import com.basic.movement.player.*;
+import com.basic.movement.scene.*;
 
 public class GridMovementScreen extends AbstractScreen {
 
@@ -25,6 +30,9 @@ public class GridMovementScreen extends AbstractScreen {
     private ShapeRenderer shaper;
     private Viewport viewport;
 
+    private World world;
+    private Box2DDebugRenderer debugRenderer;
+
     public GridMovementScreen(BasicMovementGame game) {
         super(game);
     }
@@ -35,11 +43,14 @@ public class GridMovementScreen extends AbstractScreen {
 
     @Override
     public void show() {
+        world = new World(new Vector2(0, 0), true);
         atlas = new TextureAtlas("output/brendan.atlas");
         player = new Player(this, 56, 21, 60, 21);
-        player.setPosition(240, 240);
-        player.setTargetPosition(240, 240);
+        player.setPosition(128, 64);
+        player.setTargetPosition(128, 64);
         camera = new OrthographicCamera(Gdx.graphics.getHeight(), Gdx.graphics.getHeight());
+
+        player.getBody().setTransform(128, 64, 0);
 
         hud = new Hud(game.getBatch());
 
@@ -50,8 +61,38 @@ public class GridMovementScreen extends AbstractScreen {
         viewport = new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
         camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
 
+        debugRenderer = new Box2DDebugRenderer();
+        debugRenderer.SHAPE_STATIC.set(1, 0, 0, 1);
+
+        createBodies("walls");
+        createBodies("ocean");
+        createBodies("signs");
+        createBodies("tall grass");
+        createBodies("doors");
+
         Gdx.input.setInputProcessor(player.getMovementManager().getInput());
         shaper = new ShapeRenderer();
+
+    }
+
+    private void createBodies(String objectName) {
+        BodyDef bodyDef = new BodyDef();
+        PolygonShape shape = new PolygonShape();
+        FixtureDef fixtureDef = new FixtureDef();
+        Body body;
+
+        for (MapObject object : map.getLayers().get(objectName).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
+
+            bodyDef.type = BodyDef.BodyType.StaticBody;
+            bodyDef.position.set(rectangle.getX() + rectangle.getWidth() / 2, rectangle.getY() + rectangle.getHeight() / 2);
+
+            body = world.createBody(bodyDef);
+
+            shape.setAsBox(rectangle.getWidth() / 2, rectangle.getHeight() / 2);
+            fixtureDef.shape = shape;
+            body.createFixture(fixtureDef);
+        }
     }
 
     @Override
@@ -60,7 +101,7 @@ public class GridMovementScreen extends AbstractScreen {
         Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
 
         renderMap();
-        renderShapes();
+        renderBodies();
         renderBatch();
         renderHUD();
 
@@ -86,7 +127,12 @@ public class GridMovementScreen extends AbstractScreen {
     private void renderShapes() {
         shaper.setProjectionMatrix(camera.combined);
         shaper.begin(ShapeRenderer.ShapeType.Line);
+        renderAxis();
         shaper.end();
+    }
+
+    private void renderBodies() {
+        debugRenderer.render(world, camera.combined);
     }
 
     @Override
@@ -107,6 +153,20 @@ public class GridMovementScreen extends AbstractScreen {
     private void update(float delta) {
         manageKeyboard();
 
+        world.step(1 / 60f, 6, 2);
+
+        if (Gdx.input.isKeyPressed(Input.Keys.P)) {
+            player.printPosition();
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.getBody().getLinearVelocity().x >= -50) {
+            player.getBody().setLinearVelocity(new Vector2(-50f, 0));
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getBody().getLinearVelocity().x <= 50) {
+            player.getBody().setLinearVelocity(new Vector2(50f, 0));
+        } else if(!Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)){
+            player.getBody().setLinearVelocity(new Vector2(0, 0));
+        }
+
         player.update(delta);
         hud.update(player);
         camera.position.set(player.getX(), player.getY(), 0);
@@ -115,5 +175,10 @@ public class GridMovementScreen extends AbstractScreen {
 
     private void manageKeyboard() {
         player.manageMovement();
+    }
+
+    @Override
+    public World getWorld() {
+        return this.world;
     }
 }

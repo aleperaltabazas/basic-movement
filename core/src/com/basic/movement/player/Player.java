@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.physics.box2d.*;
 import com.basic.movement.player.movement.MovementState;
 import com.basic.movement.player.movement.Running;
 import com.basic.movement.player.movement.Standing;
@@ -38,6 +40,8 @@ public class Player extends Sprite {
     private MovementManager movementManager;
     private TextureRegion currentTexture;
 
+    private Body body;
+
     public Player(AbstractScreen screen, int walkWidth, int walkHeight, int runWidth, int runHeight) {
         super(screen.getAtlas().findRegion("standing/south"));
         this.screen = screen;
@@ -57,6 +61,8 @@ public class Player extends Sprite {
         textureMap = new PlayerTextureMap();
         movementManager = new MovementManager(16, 16);
 
+        defineBody();
+
         textureMap.putWalking(Direction.North, fillFromAtlas("walking/north", this.WALKING_WIDTH, 4, this.WALKING_HEIGHT, 1));
         textureMap.putWalking(Direction.South, fillFromAtlas("walking/south", this.WALKING_WIDTH, 4, this.WALKING_HEIGHT, 1));
         textureMap.putWalking(Direction.West, fillFromAtlas("walking/west", this.WALKING_WIDTH, 4, this.WALKING_HEIGHT, 1));
@@ -71,6 +77,20 @@ public class Player extends Sprite {
         textureMap.putStanding(Direction.North, screen.getAtlas().findRegion("standing/north"));
         textureMap.putStanding(Direction.West, screen.getAtlas().findRegion("standing/west"));
         textureMap.putStanding(Direction.East, screen.getAtlas().findRegion("standing/east"));
+    }
+
+    private void defineBody() {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.position.set(getX(), getY());
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        body = screen.getWorld().createBody(bodyDef);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        CircleShape shape = new CircleShape();
+        shape.setRadius(7);
+        fixtureDef.shape = shape;
+
+        body.createFixture(fixtureDef);
     }
 
     private Animation<TextureRegion> fillFromAtlas(String regionName, int width, int columns, int height, int rows) {
@@ -91,9 +111,11 @@ public class Player extends Sprite {
     }
 
     public void update(float delta) {
-        move();
+        //move();
         setRegion(getFrame(delta));
         setSize(getRegionWidth(), getRegionHeight());
+        //body.setActive(true);
+        //body.setTransform(getX(), getY(), 0);
     }
 
     public TextureRegion getFrame(float delta) {
@@ -245,5 +267,16 @@ public class Player extends Sprite {
 
     public TextureRegion getRegion() {
         return currentTexture;
+    }
+
+    public void printPosition() {
+        System.out.println("Sprite x: " + getX());
+        System.out.println("Sprite y: " + getY());
+        System.out.println("Body x: " + body.getPosition().x);
+        System.out.println("Body y: " + body.getPosition().y);
+    }
+
+    public Body getBody() {
+        return this.body;
     }
 }
