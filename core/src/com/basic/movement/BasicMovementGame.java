@@ -6,6 +6,9 @@ import com.basic.movement.screen.AbstractScreen;
 import com.basic.movement.screen.GridMovementScreen;
 
 public class BasicMovementGame extends Game {
+    public static final float WIDTH = 240;
+    public static final float HEIGHT = 160;
+
     public SpriteBatch batch;
 
     private AbstractScreen brendan;
