@@ -45,12 +45,12 @@ public class Box2DWorldCreator {
         }
     }
 
-    private void createBodies(String objectName, Class<? extends Tile> entityClass) {
+    private void createBodies(String objectName, Class<? extends InteractiveTile> entityClass) {
         for (MapObject object : map.getLayers().get(objectName).getObjects().getByType(RectangleMapObject.class)) {
             try {
                 Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
 
-                Constructor<? extends Tile> ctor = entityClass.getConstructor(World.class, TiledMap.class, Rectangle.class);
+                Constructor<? extends InteractiveTile> ctor = entityClass.getConstructor(World.class, TiledMap.class, Rectangle.class);
                 ctor.newInstance(world, map, rectangle);
             } catch (Exception e) {
                 System.out.println(e.getMessage());

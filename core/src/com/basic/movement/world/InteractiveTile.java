@@ -4,14 +4,15 @@ import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 
-public abstract class Tile {
+public abstract class InteractiveTile {
     protected World world;
     protected TiledMap map;
     protected TiledMapTile tile;
     protected Rectangle bounds;
     protected Body body;
+    protected Fixture fixture;
 
-    public Tile(World world, TiledMap map, Rectangle bounds) {
+    public InteractiveTile(World world, TiledMap map, Rectangle bounds) {
         this.world = world;
         this.map = map;
         this.bounds = bounds;
@@ -27,6 +28,8 @@ public abstract class Tile {
 
         shape.setAsBox(bounds.getWidth() / 2, bounds.getHeight() / 2);
         fixtureDef.shape = shape;
-        body.createFixture(fixtureDef);
+        fixture = body.createFixture(fixtureDef);
     }
+
+    public abstract void onContact();
 }
