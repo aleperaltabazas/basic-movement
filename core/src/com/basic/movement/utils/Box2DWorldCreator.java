@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.basic.movement.world.*;
 
+import java.lang.reflect.Constructor;
+
 public class Box2DWorldCreator {
     private World world;
     private TiledMap map;
@@ -15,11 +17,11 @@ public class Box2DWorldCreator {
         this.world = world;
         this.map = map;
 
-        createBodies("walls");
-        createBodies("ocean");
-        createBodies("signs");
-        createBodies("tall grass");
-        createBodies("doors");
+        createBodies("walls", Wall.class);
+        createBodies("ocean", Ocean.class);
+        createBodies("signs", Sign.class);
+        createBodies("tall grass", TallGrass.class);
+        createBodies("doors", Door.class);
     }
 
     private void createBodies(String objectName) {
@@ -41,6 +43,20 @@ public class Box2DWorldCreator {
             body.createFixture(fixtureDef);
 
         }
+    }
 
+    private void createBodies(String objectName, Class<? extends Tile> entityClass) {
+        for (MapObject object : map.getLayers().get(objectName).getObjects().getByType(RectangleMapObject.class)) {
+            try {
+                Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
+
+                Constructor<? extends Tile> ctor = entityClass.getConstructor(World.class, TiledMap.class, Rectangle.class);
+                ctor.newInstance(world, map, rectangle);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                System.out.println(e.getClass().toString());
+                throw new RuntimeException(e.getMessage());
+            }
+        }
     }
 }

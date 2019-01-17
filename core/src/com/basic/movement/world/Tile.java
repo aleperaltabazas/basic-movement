@@ -15,5 +15,18 @@ public abstract class Tile {
         this.world = world;
         this.map = map;
         this.bounds = bounds;
+
+        BodyDef bodyDef = new BodyDef();
+        PolygonShape shape = new PolygonShape();
+        FixtureDef fixtureDef = new FixtureDef();
+
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(bounds.getX() + bounds.getWidth() / 2, bounds.getY() + bounds.getHeight() / 2);
+
+        body = world.createBody(bodyDef);
+
+        shape.setAsBox(bounds.getWidth() / 2, bounds.getHeight() / 2);
+        fixtureDef.shape = shape;
+        body.createFixture(fixtureDef);
     }
 }
