@@ -8,6 +8,8 @@ import com.basic.movement.screen.GridMovementScreen;
 public class BasicMovementGame extends Game {
     public static final float WIDTH = 240;
     public static final float HEIGHT = 160;
+    public static final float TILE_WIDTH = 16;
+    public static final float TILE_HEIGHT = 16;
 
     public SpriteBatch batch;
 

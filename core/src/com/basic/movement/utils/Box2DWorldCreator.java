@@ -13,6 +13,8 @@ public class Box2DWorldCreator {
     private World world;
     private TiledMap map;
 
+    private WorldMap worldMap;
+
     public Box2DWorldCreator(World world, TiledMap map) {
         this.world = world;
         this.map = map;
@@ -22,27 +24,6 @@ public class Box2DWorldCreator {
         createBodies("signs", Sign.class);
         createBodies("tall grass", TallGrass.class);
         createBodies("doors", Door.class);
-    }
-
-    private void createBodies(String objectName) {
-        BodyDef bodyDef = new BodyDef();
-        PolygonShape shape = new PolygonShape();
-        FixtureDef fixtureDef = new FixtureDef();
-        Body body;
-
-        for (MapObject object : map.getLayers().get(objectName).getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
-
-            bodyDef.type = BodyDef.BodyType.StaticBody;
-            bodyDef.position.set(rectangle.getX() + rectangle.getWidth() / 2, rectangle.getY() + rectangle.getHeight() / 2);
-
-            body = world.createBody(bodyDef);
-
-            shape.setAsBox(rectangle.getWidth() / 2, rectangle.getHeight() / 2);
-            fixtureDef.shape = shape;
-            body.createFixture(fixtureDef);
-
-        }
     }
 
     private void createBodies(String objectName, Class<? extends InteractiveTile> entityClass) {

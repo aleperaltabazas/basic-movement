@@ -19,6 +19,7 @@ import com.basic.movement.player.*;
 import com.basic.movement.scene.*;
 import com.basic.movement.utils.Box2DWorldCreator;
 import com.basic.movement.utils.OverworldContactListener;
+import com.basic.movement.world.WorldMap;
 
 public class GridMovementScreen extends AbstractScreen {
 
@@ -35,6 +36,8 @@ public class GridMovementScreen extends AbstractScreen {
 
     private World world;
     private Box2DDebugRenderer debugRenderer;
+
+    private WorldMap worldMap;
 
     public GridMovementScreen(BasicMovementGame game) {
         super(game);
@@ -66,6 +69,7 @@ public class GridMovementScreen extends AbstractScreen {
 
         debugRenderer = new Box2DDebugRenderer();
         debugRenderer.SHAPE_STATIC.set(1, 0, 0, 1);
+        debugRenderer.SHAPE_KINEMATIC.set(1, 0, 1, 1);
         debugRenderer.SHAPE_AWAKE.set(0, 0, 1, 1);
 
         new Box2DWorldCreator(world, map);

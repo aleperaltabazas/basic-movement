@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.physics.box2d.*;
+import com.basic.movement.BasicMovementGame;
 import com.basic.movement.player.movement.*;
 import com.basic.movement.screen.*;
 import com.basic.movement.utils.*;
+import com.sun.javafx.geom.Edge;
 
 public class Player extends Sprite {
     private AbstractScreen screen;
@@ -73,24 +75,47 @@ public class Player extends Sprite {
 
     private void defineBody() {
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(getX() + getWidth() / 2, getY() + getHeight() / 2);
+        Vector2 center = new Vector2(getX() + BasicMovementGame.TILE_WIDTH / 2, getY() + BasicMovementGame.TILE_HEIGHT / 2);
+        bodyDef.position.set(center);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         body = screen.getWorld().createBody(bodyDef);
 
         FixtureDef fixtureDef = new FixtureDef();
-        CircleShape shape = new CircleShape();
-        shape.setPosition(new Vector2(getX() + getWidth() / 2, getY() + getWidth() / 2));
-        shape.setRadius(getWidth() / 2);
-        fixtureDef.shape = shape;
-
+        PolygonShape playerBox = new PolygonShape();
+        playerBox.setAsBox(center.x, center.y, center, 0);
+        fixtureDef.shape = playerBox;
         body.createFixture(fixtureDef);
 
-        EdgeShape head = new EdgeShape();
-        head.set(new Vector2(-2, 7), new Vector2(2, 7));
-        fixtureDef.shape = head;
+        defineEdges();
+    }
+
+    private void defineEdges() {
+        FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.isSensor = true;
 
-        body.createFixture(fixtureDef).setUserData("head");
+        EdgeShape north = new EdgeShape();
+        north.set(new Vector2(getX() - 1, getY() + BasicMovementGame.TILE_HEIGHT), new Vector2(getX() + BasicMovementGame.TILE_WIDTH + 1, getY() + BasicMovementGame.TILE_HEIGHT));
+        fixtureDef.shape = north;
+
+        body.createFixture(fixtureDef).setUserData("north");
+
+        EdgeShape south = new EdgeShape();
+        north.set(new Vector2(getX() + 1, getY()), new Vector2(getX() + BasicMovementGame.TILE_WIDTH - 1, getY()));
+        fixtureDef.shape = south;
+
+        body.createFixture(fixtureDef).setUserData("south");
+
+        EdgeShape east = new EdgeShape();
+        east.set(new Vector2(getX() + BasicMovementGame.TILE_WIDTH, getY() + 1), new Vector2(getX() + BasicMovementGame.TILE_WIDTH, getY() + BasicMovementGame.TILE_HEIGHT - 1));
+        fixtureDef.shape = east;
+
+        body.createFixture(fixtureDef).setUserData("east");
+
+        EdgeShape west = new EdgeShape();
+        west.set(new Vector2(getX(), getY() + 1), new Vector2(getX(), getY() + BasicMovementGame.TILE_HEIGHT - 1));
+        fixtureDef.shape = west;
+
+        body.createFixture(fixtureDef).setUserData("west");
     }
 
     private Animation<TextureRegion> fillFromAtlas(String regionName, int width, int columns, int height, int rows) {
