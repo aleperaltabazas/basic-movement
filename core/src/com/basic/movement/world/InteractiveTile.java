@@ -15,5 +15,11 @@ public abstract class InteractiveTile {
         this.worldMap = world;
         this.map = map;
         this.bounds = bounds;
+
+        worldMap.addTile(bounds.x, bounds.y, this);
+    }
+
+    public boolean canStep() {
+        return false;
     }
 }

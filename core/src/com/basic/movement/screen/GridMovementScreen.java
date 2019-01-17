@@ -11,15 +11,12 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.viewport.*;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.basic.movement.BasicMovementGame;
 import com.basic.movement.player.Player;
 import com.basic.movement.scene.Hud;
-import com.basic.movement.world.InteractiveTile;
-import com.basic.movement.world.WorldMap;
+import com.basic.movement.world.*;
 
 import java.lang.reflect.Constructor;
 
@@ -47,12 +44,14 @@ public class GridMovementScreen extends AbstractScreen {
     @Override
     public void show() {
         atlas = new TextureAtlas("output/brendan.atlas");
+        worldMap = new WorldMap();
         player = new Player(this, 56, 21, 60, 21);
         player.setPosition(240, 240);
         player.setTargetPosition(240, 240);
         camera = new OrthographicCamera(Gdx.graphics.getHeight(), Gdx.graphics.getHeight());
 
         hud = new Hud(game.getBatch());
+
 
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("maps/town.tmx");
@@ -63,6 +62,12 @@ public class GridMovementScreen extends AbstractScreen {
 
         Gdx.input.setInputProcessor(player.getMovementManager().getInput());
         shaper = new ShapeRenderer();
+
+        createBodies("walls", Wall.class);
+        createBodies("ocean", Ocean.class);
+        createBodies("signs", Sign.class);
+        createBodies("tall grass", TallGrass.class);
+        createBodies("doors", Door.class);
     }
 
     @Override
@@ -141,5 +146,10 @@ public class GridMovementScreen extends AbstractScreen {
                 throw new RuntimeException(e.getMessage());
             }
         }
+    }
+
+    @Override
+    public WorldMap getWorldMap() {
+        return worldMap;
     }
 }

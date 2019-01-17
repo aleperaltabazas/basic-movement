@@ -4,6 +4,7 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.basic.movement.BasicMovementGame;
+import com.basic.movement.world.WorldMap;
 
 public class AnimationScreen extends AbstractScreen {
     private static final int ANCHO = 56;
@@ -84,5 +85,10 @@ public class AnimationScreen extends AbstractScreen {
 
     public TextureAtlas getAtlas() {
         return atlas;
+    }
+
+    @Override
+    public WorldMap getWorldMap() {
+        return null;
     }
 }

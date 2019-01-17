@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.physics.box2d.World;
 import com.basic.movement.player.movement.MovementState;
 import com.basic.movement.player.movement.Running;
 import com.basic.movement.player.movement.Standing;
@@ -11,6 +12,7 @@ import com.basic.movement.player.movement.Walking;
 import com.basic.movement.utils.MovementManager;
 import com.basic.movement.utils.PlayerTextureMap;
 import com.basic.movement.screen.AbstractScreen;
+import com.basic.movement.world.WorldMap;
 
 public class Player extends Sprite {
     private AbstractScreen screen;
@@ -38,9 +40,13 @@ public class Player extends Sprite {
     private MovementManager movementManager;
     private TextureRegion currentTexture;
 
+    private WorldMap worldMap;
+
     public Player(AbstractScreen screen, int walkWidth, int walkHeight, int runWidth, int runHeight) {
         super(screen.getAtlas().findRegion("standing/south"));
         this.screen = screen;
+
+        worldMap = screen.getWorldMap();
 
         stateTimer = 0;
         direction = Direction.South;
@@ -245,5 +251,9 @@ public class Player extends Sprite {
 
     public TextureRegion getRegion() {
         return currentTexture;
+    }
+
+    public WorldMap getWorldMap() {
+        return worldMap;
     }
 }

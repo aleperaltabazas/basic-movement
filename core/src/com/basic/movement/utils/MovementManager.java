@@ -21,7 +21,6 @@ public class MovementManager {
     }
 
     public void manage(Player player) {
-
         boolean west = manager.isMovingWest();
         boolean east = manager.isMovingEast();
         boolean souldMoveEastWest = (west != east);
@@ -37,6 +36,9 @@ public class MovementManager {
             player.setRunning(running);
 
             if (east) {
+                if(player.getWorldMap().isOccupied(player.getX() + TILE_WIDTH, player.getY()))
+                    throw new RuntimeException("Occupied");
+
                 player.setTargetX(player.getX() + TILE_WIDTH);
             } else if (west) {
                 player.setTargetX(player.getX() - TILE_WIDTH);

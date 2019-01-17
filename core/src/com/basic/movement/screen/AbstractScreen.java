@@ -3,6 +3,7 @@ package com.basic.movement.screen;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.basic.movement.BasicMovementGame;
+import com.basic.movement.world.WorldMap;
 
 public abstract class AbstractScreen implements Screen {
     protected BasicMovementGame game;
@@ -42,4 +43,7 @@ public abstract class AbstractScreen implements Screen {
     }
 
     public abstract TextureAtlas getAtlas();
+
+    public abstract WorldMap getWorldMap();
+
 }

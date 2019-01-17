@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.basic.movement.BasicMovementGame;
 import com.basic.movement.player.ActorPlayer;
 import com.basic.movement.utils.Scenery;
+import com.basic.movement.world.WorldMap;
 
 public class SceneScreen extends AbstractScreen {
     private TextureAtlas atlas;
@@ -57,5 +58,10 @@ public class SceneScreen extends AbstractScreen {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height);
+    }
+
+    @Override
+    public WorldMap getWorldMap() {
+        return null;
     }
 }
