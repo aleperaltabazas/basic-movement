@@ -1,19 +1,12 @@
 package com.basic.movement.player;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.physics.box2d.*;
-import com.basic.movement.player.movement.MovementState;
-import com.basic.movement.player.movement.Running;
-import com.basic.movement.player.movement.Standing;
-import com.basic.movement.player.movement.Walking;
-import com.basic.movement.utils.MovementManager;
-import com.basic.movement.utils.PlayerTextureMap;
-import com.basic.movement.screen.AbstractScreen;
+import com.basic.movement.player.movement.*;
+import com.basic.movement.screen.*;
+import com.basic.movement.utils.*;
 
 public class Player extends Sprite {
     private AbstractScreen screen;
@@ -30,8 +23,6 @@ public class Player extends Sprite {
     private Direction direction;
     private float stateTimer;
 
-    private float speedX = 0;
-    private float speedY = 0;
     private boolean moving;
 
     private float targetX;
@@ -95,7 +86,7 @@ public class Player extends Sprite {
         body.createFixture(fixtureDef);
 
         EdgeShape head = new EdgeShape();
-        head.set(new Vector2(-2,    7), new Vector2(2, 7));
+        head.set(new Vector2(-2, 7), new Vector2(2, 7));
         fixtureDef.shape = head;
         fixtureDef.isSensor = true;
 
@@ -140,16 +131,22 @@ public class Player extends Sprite {
     }
 
     public void stopMovement() {
-        if (Math.abs(speedX) > 0.5f)
-            speedX *= 0.5f;
-        else {
-            speedX = 0;
+        if (Math.abs(body.getLinearVelocity().x) > 0.5f) {
+            float newSpeedX = body.getLinearVelocity().x * 0.5f;
+            float speedY = body.getLinearVelocity().y;
+            body.setLinearVelocity(newSpeedX, speedY);
+        } else {
+            float speedY = body.getLinearVelocity().y;
+            body.setLinearVelocity(0, speedY);
         }
 
-        if (Math.abs(speedY) > 0.5f)
-            speedY *= 0.5f;
-        else {
-            speedY = 0;
+        if (Math.abs(body.getLinearVelocity().x) > 0.5f) {
+            float speedX = body.getLinearVelocity().x;
+            float newSpeedY = body.getLinearVelocity().y * 0.5f;
+            body.setLinearVelocity(speedX, newSpeedY);
+        } else {
+            float speedX = body.getLinearVelocity().x;
+            body.setLinearVelocity(speedX, 0);
         }
     }
 
@@ -189,8 +186,8 @@ public class Player extends Sprite {
         float positionX = body.getPosition().x;
         float positionY = body.getPosition().y;
         float delta = Gdx.graphics.getDeltaTime();
-        positionX += speedX * delta;
-        positionY += speedY * delta;
+        positionX += body.getLinearVelocity().x * delta;
+        positionY += body.getLinearVelocity().y * delta;
         setPosition(positionX, positionY);
     }
 
@@ -255,17 +252,7 @@ public class Player extends Sprite {
     }
 
     public void setSpeed(float speedX, float speedY) {
-        setSpeedX(speedX);
-        setSpeedY(speedY);
         body.setLinearVelocity(speedX, speedY);
-    }
-
-    public void setSpeedX(float speedX) {
-        this.speedX = speedX;
-    }
-
-    public void setSpeedY(float speedY) {
-        this.speedY = speedY;
     }
 
     public TextureRegion getRegion() {

@@ -7,7 +7,7 @@ import com.basic.movement.player.Player;
 import com.basic.movement.utils.PlayerTextureMap;
 
 public class Walking implements MovementState {
-    static final float SPEED = 50f;
+    static final float SPEED = 30f;
 
     @Override
     public void moveNorth(Player player) {
@@ -17,7 +17,6 @@ public class Walking implements MovementState {
 
     @Override
     public void moveSouth(Player player) {
-
         player.setDirection(Direction.South);
         player.setSpeed(0, -SPEED);
     }
