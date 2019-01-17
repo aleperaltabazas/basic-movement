@@ -5,13 +5,23 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.*;
 import com.basic.movement.BasicMovementGame;
 import com.basic.movement.player.Player;
 import com.basic.movement.scene.Hud;
+import com.basic.movement.world.InteractiveTile;
+import com.basic.movement.world.WorldMap;
+
+import java.lang.reflect.Constructor;
 
 public class GridMovementScreen extends AbstractScreen {
 
@@ -24,6 +34,7 @@ public class GridMovementScreen extends AbstractScreen {
     private OrthogonalTiledMapRenderer mapRenderer;
     private ShapeRenderer shaper;
     private Viewport viewport;
+    private WorldMap worldMap;
 
     public GridMovementScreen(BasicMovementGame game) {
         super(game);
@@ -115,5 +126,20 @@ public class GridMovementScreen extends AbstractScreen {
 
     private void manageKeyboard() {
         player.manageMovement();
+    }
+
+    private void createBodies(String objectName, Class<? extends InteractiveTile> entityClass) {
+        for (MapObject object : map.getLayers().get(objectName).getObjects().getByType(RectangleMapObject.class)) {
+            try {
+                Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
+
+                Constructor<? extends InteractiveTile> ctor = entityClass.getConstructor(WorldMap.class, TiledMap.class, Rectangle.class);
+                ctor.newInstance(worldMap, map, rectangle);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                System.out.println(e.getClass().toString());
+                throw new RuntimeException(e.getMessage());
+            }
+        }
     }
 }
