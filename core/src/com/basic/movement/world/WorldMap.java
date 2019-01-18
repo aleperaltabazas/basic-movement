@@ -19,7 +19,7 @@ public class WorldMap {
     }
 
     public boolean isOccupied(float x, float y) {
-        if (tileMap.containsKey(new Vector2(x, y)))
+        if (existsTile(x, y))
             return !tileMap.get(new Vector2(x, y)).canStep();
 
         return false;
@@ -28,5 +28,17 @@ public class WorldMap {
 
     public void setPlayerPosition(Player player) {
         this.playerPosition = new Vector2(player.getX(), player.getY());
+    }
+
+    public void interactWithTile(float x, float y) {
+        Vector2 position = new Vector2(x, y);
+
+        if (existsTile(x, y)) {
+            tileMap.get(new Vector2(x, y)).interact();
+        }
+    }
+
+    private boolean existsTile(float x, float y) {
+        return tileMap.containsKey(new Vector2(x, y));
     }
 }

@@ -19,6 +19,7 @@ import com.basic.movement.player.Player;
 import com.basic.movement.scene.Hud;
 import com.basic.movement.utils.MovementManager;
 import com.basic.movement.world.*;
+import com.basic.movement.world.Readable;
 
 import java.lang.reflect.Constructor;
 
@@ -88,7 +89,7 @@ public class GridMovementScreen extends AbstractScreen {
 
         createBodies("walls", Wall.class);
         createBodies("ocean", Ocean.class);
-        createBodies("signs", Sign.class);
+        createBodies("signs", Readable.class);
         createBodies("tall grass", TallGrass.class);
         createBodies("doors", Door.class);
     }

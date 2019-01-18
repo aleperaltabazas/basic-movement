@@ -271,4 +271,8 @@ public class Player extends Sprite {
             virtualMovement = false;
         }
     }
+
+    public Direction getDirection() {
+        return this.direction;
+    }
 }

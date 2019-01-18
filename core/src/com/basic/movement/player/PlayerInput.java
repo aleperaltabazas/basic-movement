@@ -27,6 +27,10 @@ public class PlayerInput extends InputAdapter {
                 return true;
             case Input.Keys.X:
                 manager.setRunning(true);
+                return true;
+            case Input.Keys.Z:
+                manager.setInteracting(true);
+                return true;
             default:
                 return false;
         }
@@ -49,6 +53,10 @@ public class PlayerInput extends InputAdapter {
                 return true;
             case Input.Keys.X:
                 manager.setRunning(false);
+                return true;
+            case Input.Keys.Z:
+                manager.setInteracting(false);
+                return true;
             default:
                 return false;
         }

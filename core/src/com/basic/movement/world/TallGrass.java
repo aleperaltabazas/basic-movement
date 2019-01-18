@@ -9,4 +9,9 @@ public class TallGrass extends InteractiveTile {
     public TallGrass(WorldMap world, TiledMap map, Rectangle bounds) {
         super(world, map, bounds);
     }
+
+    @Override
+    public boolean canStep() {
+        return true;
+    }
 }

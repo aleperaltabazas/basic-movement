@@ -7,6 +7,7 @@ public class InputManager {
     private boolean movingDown;
 
     private boolean running;
+    private boolean interacting ;
 
     public boolean isMovingWest() {
         return movingLeft;
@@ -46,5 +47,13 @@ public class InputManager {
 
     public void setMovingDown(boolean movingDown) {
         this.movingDown = movingDown;
+    }
+
+    public void setInteracting(boolean interacting) {
+        this.interacting = interacting;
+    }
+
+    public boolean isInteracting() {
+        return interacting;
     }
 }
