@@ -20,10 +20,14 @@ public class MovementManager {
         this.movementObserver = movementObserver;
     }
 
+    public void manage(ActorPlayer actor, WorldMap worldMap) {
+        manage(actor.getSprite(), worldMap);
+    }
+
     public void manage(Player player, WorldMap worldMap) {
         boolean west = manager.isMovingWest();
         boolean east = manager.isMovingEast();
-        boolean souldMoveEastWest = (west != east);
+        boolean shouldMoveEastWest = (west != east);
 
         boolean south = manager.isMovingSouth();
         boolean north = manager.isMovingNorth();
@@ -31,7 +35,7 @@ public class MovementManager {
 
         boolean running = manager.isRunning();
 
-        if (!player.isMoving() && souldMoveEastWest) {
+        if (!player.isMoving() && shouldMoveEastWest) {
             player.setMoving(true);
             player.setRunning(running);
 

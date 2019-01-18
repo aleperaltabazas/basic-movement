@@ -73,6 +73,8 @@ public class Player extends Sprite {
         textureMap.putStanding(Direction.North, screen.getAtlas().findRegion("standing/north"));
         textureMap.putStanding(Direction.West, screen.getAtlas().findRegion("standing/west"));
         textureMap.putStanding(Direction.East, screen.getAtlas().findRegion("standing/east"));
+
+        currentTexture = getFrame(0);
     }
 
     private Animation<TextureRegion> fillFromAtlas(String regionName, int width, int columns, int height, int rows) {

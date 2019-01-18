@@ -4,17 +4,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.basic.movement.screen.AbstractScreen;
 
 public class ActorPlayer extends Actor {
     private Player sprite;
     private TextureRegion currentFrame;
 
-    public ActorPlayer(AbstractScreen screen) {
-        sprite = new Player(screen, 56, 20, 64, 20);
+    public ActorPlayer(Player player) {
+        sprite = player;
 
         currentFrame = new TextureRegion(new Texture("may/standing/south.png"), 14, 20);
         setSize(14, 20);
+        setPosition(player.getX(), player.getY());
     }
 
     @Override
@@ -36,5 +36,18 @@ public class ActorPlayer extends Actor {
 
     public void walkNorth() {
         sprite.moveNorth();
+    }
+
+    public void setTargetPosition(float x, float y) {
+        sprite.setTargetPosition(x, y);
+    }
+
+    public Player getSprite() {
+        return sprite;
+    }
+
+    public void update(float delta) {
+        sprite.update(delta);
+        setPosition(sprite.getX(), sprite.getY());
     }
 }

@@ -1,11 +1,11 @@
 package com.basic.movement.world;
 
-import com.badlogic.gdx.maps.tiled.*;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.physics.box2d.*;
-import com.basic.movement.player.Player;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public abstract class InteractiveTile {
+public abstract class InteractiveTile extends Actor {
     protected WorldMap worldMap;
     protected TiledMap map;
     protected TiledMapTile tile;
