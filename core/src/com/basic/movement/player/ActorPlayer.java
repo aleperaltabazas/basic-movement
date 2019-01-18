@@ -32,6 +32,7 @@ public class ActorPlayer extends Actor {
         super.act(delta);
         currentFrame = sprite.getRegion();
         setSize(currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
+        setPosition(sprite.getX(), sprite.getY());
     }
 
     public void walkNorth() {
