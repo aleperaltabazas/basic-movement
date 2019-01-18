@@ -14,8 +14,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.basic.movement.BasicMovementGame;
+import com.basic.movement.player.MovementObserver;
 import com.basic.movement.player.Player;
 import com.basic.movement.scene.Hud;
+import com.basic.movement.utils.MovementManager;
 import com.basic.movement.world.*;
 
 import java.lang.reflect.Constructor;
@@ -33,6 +35,8 @@ public class GridMovementScreen extends AbstractScreen {
     private Viewport viewport;
     private WorldMap worldMap;
 
+    private MovementManager movementManager;
+
     public GridMovementScreen(BasicMovementGame game) {
         super(game);
     }
@@ -44,24 +48,43 @@ public class GridMovementScreen extends AbstractScreen {
     @Override
     public void show() {
         atlas = new TextureAtlas("output/brendan.atlas");
-        worldMap = new WorldMap();
-        player = new Player(this, 56, 21, 60, 21);
-        player.setPosition(240, 240);
-        player.setTargetPosition(240, 240);
-        camera = new OrthographicCamera(Gdx.graphics.getHeight(), Gdx.graphics.getHeight());
 
+        initializeMap();
+        initializeActors();
+        initializeMovement();
+        initializeCamera();
+        initializePlayer();
+    }
+
+    private void initializeActors() {
         hud = new Hud(game.getBatch());
+    }
 
+    private void initializeMovement() {
+        movementManager = new MovementManager(16, 16, new MovementObserver(worldMap, hud));
+        Gdx.input.setInputProcessor(movementManager.getInput());
+    }
+
+    private void initializePlayer() {
+        player = new Player(this, 56, 21, 60, 21);
+        player.setPosition(128, 64);
+        player.setTargetPosition(128, 64);
+    }
+
+    private void initializeCamera() {
+        camera = new OrthographicCamera(Gdx.graphics.getHeight(), Gdx.graphics.getHeight());
+        viewport = new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
+        camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
+
+        shaper = new ShapeRenderer();
+    }
+
+    private void initializeMap() {
+        worldMap = new WorldMap();
 
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("maps/town.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map);
-
-        viewport = new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
-        camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
-
-        Gdx.input.setInputProcessor(player.getMovementManager().getInput());
-        shaper = new ShapeRenderer();
 
         createBodies("walls", Wall.class);
         createBodies("ocean", Ocean.class);
@@ -121,16 +144,12 @@ public class GridMovementScreen extends AbstractScreen {
     }
 
     private void update(float delta) {
-        manageKeyboard();
+        movementManager.manage(player, worldMap);
 
         player.update(delta);
         hud.update(player);
         camera.position.set(player.getX(), player.getY(), 0);
         camera.update();
-    }
-
-    private void manageKeyboard() {
-        player.manageMovement();
     }
 
     private void createBodies(String objectName, Class<? extends InteractiveTile> entityClass) {
@@ -146,10 +165,5 @@ public class GridMovementScreen extends AbstractScreen {
                 throw new RuntimeException(e.getMessage());
             }
         }
-    }
-
-    @Override
-    public WorldMap getWorldMap() {
-        return worldMap;
     }
 }

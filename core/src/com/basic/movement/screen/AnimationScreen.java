@@ -86,9 +86,4 @@ public class AnimationScreen extends AbstractScreen {
     public TextureAtlas getAtlas() {
         return atlas;
     }
-
-    @Override
-    public WorldMap getWorldMap() {
-        return null;
-    }
 }

@@ -49,7 +49,7 @@ public class SceneScreen extends AbstractScreen {
         stage.draw();
         stage.act();
 
-        if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             may.addAction(Actions.moveBy(0, 16, 1));
             may.walkNorth();
         }
@@ -58,10 +58,5 @@ public class SceneScreen extends AbstractScreen {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height);
-    }
-
-    @Override
-    public WorldMap getWorldMap() {
-        return null;
     }
 }

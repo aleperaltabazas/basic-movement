@@ -4,15 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.physics.box2d.World;
 import com.basic.movement.player.movement.MovementState;
 import com.basic.movement.player.movement.Running;
 import com.basic.movement.player.movement.Standing;
 import com.basic.movement.player.movement.Walking;
-import com.basic.movement.utils.MovementManager;
-import com.basic.movement.utils.PlayerTextureMap;
 import com.basic.movement.screen.AbstractScreen;
-import com.basic.movement.world.WorldMap;
+import com.basic.movement.utils.PlayerTextureMap;
 
 public class Player extends Sprite {
     private AbstractScreen screen;
@@ -37,16 +34,16 @@ public class Player extends Sprite {
     private float targetY;
     private boolean running = false;
 
-    private MovementManager movementManager;
     private TextureRegion currentTexture;
 
-    private WorldMap worldMap;
+    private float virtualSpeed = 50f;
+    private float virtualPosition = 0;
+    private float virtualTargetPosition;
+    private boolean virtualMovement = false;
 
     public Player(AbstractScreen screen, int walkWidth, int walkHeight, int runWidth, int runHeight) {
         super(screen.getAtlas().findRegion("standing/south"));
         this.screen = screen;
-
-        worldMap = screen.getWorldMap();
 
         stateTimer = 0;
         direction = Direction.South;
@@ -61,7 +58,6 @@ public class Player extends Sprite {
         this.RUNNING_HEIGHT = runHeight;
 
         textureMap = new PlayerTextureMap();
-        movementManager = new MovementManager(16, 16);
 
         textureMap.putWalking(Direction.North, fillFromAtlas("walking/north", this.WALKING_WIDTH, 4, this.WALKING_HEIGHT, 1));
         textureMap.putWalking(Direction.South, fillFromAtlas("walking/south", this.WALKING_WIDTH, 4, this.WALKING_HEIGHT, 1));
@@ -93,7 +89,7 @@ public class Player extends Sprite {
             }
         }
 
-        return new Animation<TextureRegion>(0.16f, frames);
+        return new Animation<>(0.16f, frames);
     }
 
     public void update(float delta) {
@@ -131,44 +127,49 @@ public class Player extends Sprite {
     }
 
     public void move() {
-        if ((targetX > getX()) && (targetX - getX() > 1)) {
-            if (running)
-                run();
-            else
-                walk();
-
-            moveEast();
-        } else if ((targetX < getX()) && (targetX - getX()) < -1) {
-            if (running)
-                run();
-            else
-                walk();
-
-            moveWest();
-        } else if ((targetY > getY()) && (targetY - getY()) > 1) {
-            if (running)
-                run();
-            else
-                walk();
-
-            moveNorth();
-        } else if ((targetY < getY()) && (targetY - getY()) < -1) {
-            if (running)
-                run();
-            else
-                walk();
-
-            moveSouth();
+        if (virtualMovement) {
+            walkInPlace(this.direction);
         } else {
-            stop();
+            if ((targetX > getX()) && (targetX - getX() > 1)) {
+                if (running)
+                    run();
+                else
+                    walk();
+
+                moveEast();
+            } else if ((targetX < getX()) && (targetX - getX()) < -1) {
+                if (running)
+                    run();
+                else
+                    walk();
+
+                moveWest();
+            } else if ((targetY > getY()) && (targetY - getY()) > 1) {
+                if (running)
+                    run();
+                else
+                    walk();
+
+                moveNorth();
+            } else if ((targetY < getY()) && (targetY - getY()) < -1) {
+                if (running)
+                    run();
+                else
+                    walk();
+
+                moveSouth();
+            } else {
+                stop();
+            }
+
+            float positionX = getX();
+            float positionY = getY();
+            float delta = Gdx.graphics.getDeltaTime();
+            positionX += speedX * delta;
+            positionY += speedY * delta;
+            setPosition(positionX, positionY);
         }
 
-        float positionX = getX();
-        float positionY = getY();
-        float delta = Gdx.graphics.getDeltaTime();
-        positionX += speedX * delta;
-        positionY += speedY * delta;
-        setPosition(positionX, positionY);
     }
 
     public void moveNorth() {
@@ -220,14 +221,6 @@ public class Player extends Sprite {
         this.running = running;
     }
 
-    public void manageMovement() {
-        movementManager.manage(this);
-    }
-
-    public MovementManager getMovementManager() {
-        return this.movementManager;
-    }
-
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
@@ -253,7 +246,27 @@ public class Player extends Sprite {
         return currentTexture;
     }
 
-    public WorldMap getWorldMap() {
-        return worldMap;
+    public void walkInPlace(Direction direction) {
+        if (!moving) {
+            moving = true;
+        }
+
+        if (!virtualMovement) {
+            this.movementState = new Walking();
+            virtualPosition = 0;
+            virtualTargetPosition = 16;
+            virtualMovement = true;
+            this.direction = direction;
+        }
+
+        float delta = Gdx.graphics.getDeltaTime();
+        virtualPosition += virtualSpeed * delta;
+
+        if (virtualPosition + 1 > virtualTargetPosition) {
+            moving = false;
+            virtualPosition = 0;
+            virtualTargetPosition = 0;
+            virtualMovement = false;
+        }
     }
 }

@@ -44,6 +44,4 @@ public abstract class AbstractScreen implements Screen {
 
     public abstract TextureAtlas getAtlas();
 
-    public abstract WorldMap getWorldMap();
-
 }

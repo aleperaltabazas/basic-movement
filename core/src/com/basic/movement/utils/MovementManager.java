@@ -1,26 +1,26 @@
 package com.basic.movement.utils;
 
-import com.basic.movement.player.InputManager;
-import com.basic.movement.player.Player;
-import com.basic.movement.player.PlayerInput;
+import com.basic.movement.player.*;
+import com.basic.movement.world.WorldMap;
 
 public class MovementManager {
     private final float TILE_WIDTH;
     private final float TILE_HEIGHT;
 
     private PlayerInput input;
-
     private InputManager manager;
+    private MovementObserver movementObserver;
 
-    public MovementManager(float tileWidth, float tileHeight) {
+    public MovementManager(float tileWidth, float tileHeight, MovementObserver movementObserver) {
         TILE_WIDTH = tileWidth;
         TILE_HEIGHT = tileHeight;
 
-        manager = new InputManager();
-        input = new PlayerInput(manager);
+        this.manager = new InputManager();
+        this.input = new PlayerInput(manager);
+        this.movementObserver = movementObserver;
     }
 
-    public void manage(Player player) {
+    public void manage(Player player, WorldMap worldMap) {
         boolean west = manager.isMovingWest();
         boolean east = manager.isMovingEast();
         boolean souldMoveEastWest = (west != east);
@@ -36,26 +36,36 @@ public class MovementManager {
             player.setRunning(running);
 
             if (east) {
-                if(player.getWorldMap().isOccupied(player.getX() + TILE_WIDTH, player.getY()))
-                    throw new RuntimeException("Occupied");
-
-                player.setTargetX(player.getX() + TILE_WIDTH);
+                if (worldMap.isOccupied(player.getX() + TILE_WIDTH, player.getY()))
+                    player.walkInPlace(Direction.East);
+                else
+                    player.setTargetX(player.getX() + TILE_WIDTH);
             } else if (west) {
-                player.setTargetX(player.getX() - TILE_WIDTH);
+                if (worldMap.isOccupied(player.getX() - TILE_WIDTH, player.getY()))
+                    player.walkInPlace(Direction.West);
+                else
+                    player.setTargetX(player.getX() - TILE_WIDTH);
             }
         } else if (!player.isMoving() && shouldMoveSouthNorth) {
             player.setMoving(true);
             player.setRunning(running);
 
             if (north) {
-                player.setTargetY(player.getY() + TILE_HEIGHT);
+                if (worldMap.isOccupied(player.getX(), player.getY() + TILE_HEIGHT))
+                    player.walkInPlace(Direction.North);
+                else
+                    player.setTargetY(player.getY() + TILE_HEIGHT);
             } else if (south) {
-                player.setTargetY(player.getY() - TILE_HEIGHT);
+                if (worldMap.isOccupied(player.getX(), player.getY() - TILE_HEIGHT))
+                    player.walkInPlace(Direction.South);
+                else
+                    player.setTargetY(player.getY() - TILE_HEIGHT);
             }
         } else {
             player.stopMovement();
         }
 
+        movementObserver.actOnMovement(player);
     }
 
     public PlayerInput getInput() {
