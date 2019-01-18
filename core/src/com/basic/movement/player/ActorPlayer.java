@@ -50,8 +50,4 @@ public class ActorPlayer extends Actor {
     public Player getSprite() {
         return sprite;
     }
-
-    public void update(float delta) {
-
-    }
 }

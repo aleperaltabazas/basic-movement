@@ -47,4 +47,8 @@ public class Hud {
         xLabel.setText(String.format("%.2f", x = player.getX()));
         yLabel.setText(String.format("%.2f", y = player.getY()));
     }
+
+    public void update(ActorPlayer actor) {
+        update(actor.getSprite());
+    }
 }

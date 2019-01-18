@@ -152,11 +152,10 @@ public class SceneScreen extends AbstractScreen {
     }
 
     private void update(float delta) {
-        movementManager.manage(player, worldMap);
+        movementManager.manage(actorPlayer, worldMap);
 
-        player.update(delta);
         hud.update(player);
-        stage.getCamera().position.set(player.getX(), player.getY(), 0);
+        stage.getCamera().position.set(actorPlayer.getX(), actorPlayer.getY(), 0);
         stage.getCamera().update();
     }
 
