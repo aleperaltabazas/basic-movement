@@ -20,7 +20,7 @@ public class ActorPlayer extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.setColor(getColor().r, getColor().g, getColor().b, getColor().a * parentAlpha);
-        batch.draw(currentFrame, getX(), getY(),
+        batch.draw(sprite.getRegion(), getX(), getY(),
                 getOriginX(), getOriginY(),
                 getWidth(), getHeight(),
                 getScaleX(), getScaleY(),
@@ -30,9 +30,13 @@ public class ActorPlayer extends Actor {
     @Override
     public void act(float delta) {
         super.act(delta);
+        sprite.update(delta);
         currentFrame = sprite.getRegion();
         setSize(currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
         setPosition(sprite.getX(), sprite.getY());
+        setOrigin(sprite.getOriginX(), sprite.getOriginY());
+        setScale(sprite.getScaleX(), sprite.getScaleY());
+        setRotation(sprite.getRotation());
     }
 
     public void walkNorth() {
@@ -48,7 +52,6 @@ public class ActorPlayer extends Actor {
     }
 
     public void update(float delta) {
-        sprite.update(delta);
-        setPosition(sprite.getX(), sprite.getY());
+
     }
 }
