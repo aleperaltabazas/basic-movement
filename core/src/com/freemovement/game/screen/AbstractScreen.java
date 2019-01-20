@@ -37,4 +37,8 @@ public abstract class AbstractScreen implements Screen {
     public void dispose() {
         game.dispose();
     }
+
+    public TextureAtlasAdapter getAtlas() {
+        return atlas;
+    }
 }
