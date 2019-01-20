@@ -47,4 +47,24 @@ public class InputManager extends InputAdapter {
                 return false;
         }
     }
+
+    public boolean isMovingWest() {
+        return movingWest;
+    }
+
+    public boolean isMovingEast() {
+        return movingEast;
+    }
+
+    public boolean isMovingNorth() {
+        return movingNorth;
+    }
+
+    public boolean isMovingSouth() {
+        return movingSouth;
+    }
+
+    public boolean isRunning() {
+        return running;
+    }
 }
