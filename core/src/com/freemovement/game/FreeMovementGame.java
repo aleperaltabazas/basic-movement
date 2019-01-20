@@ -3,22 +3,29 @@ package com.freemovement.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.freemovement.game.screen.AbstractScreen;
+import com.freemovement.game.screen.FreeMovementScreen;
 
 public class FreeMovementGame extends Game {
-	private SpriteBatch batch;
-	private AbstractScreen screen;
+    public static final float TILE_WIDTH = 16;
+    public static final float TILE_HEIGHT = 16;
 
-	@Override
-	public void create () {
-		batch = new SpriteBatch();
-	}
-	
-	@Override
-	public void dispose () {
-		batch.dispose();
-	}
+    private SpriteBatch batch;
+    private AbstractScreen screen;
 
-	public SpriteBatch getBatch() {
-		return batch;
-	}
+    @Override
+    public void create() {
+        batch = new SpriteBatch();
+        screen = new FreeMovementScreen(this);
+        setScreen(screen);
+    }
+
+    @Override
+    public void dispose() {
+        batch.dispose();
+        screen.dispose();
+    }
+
+    public SpriteBatch getBatch() {
+        return batch;
+    }
 }

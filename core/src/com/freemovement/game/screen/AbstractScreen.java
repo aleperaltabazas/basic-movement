@@ -1,20 +1,19 @@
 package com.freemovement.game.screen;
 
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.physics.box2d.World;
 import com.freemovement.game.FreeMovementGame;
 import com.freemovement.game.utils.TextureAtlasAdapter;
 
 public abstract class AbstractScreen implements Screen {
     protected FreeMovementGame game;
     protected TextureAtlasAdapter atlas;
-    protected AssetManager assetManager;
+    protected World world;
 
-    public AbstractScreen(FreeMovementGame game, AssetManager assetManager) {
+    public AbstractScreen(FreeMovementGame game, World world) {
         this.game = game;
         this.atlas = new TextureAtlasAdapter("packed/crono.atlas");
-        this.assetManager = assetManager;
-
+        this.world = world;
     }
 
     @Override
@@ -39,13 +38,18 @@ public abstract class AbstractScreen implements Screen {
 
     @Override
     public void dispose() {
-        game.dispose();
         atlas.dispose();
+        world.dispose();
+        game.dispose();
     }
 
     protected abstract void childDispose();
 
     public TextureAtlasAdapter getAtlas() {
         return atlas;
+    }
+
+    public World getWorld() {
+        return world;
     }
 }

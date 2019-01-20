@@ -17,10 +17,10 @@ public class PlayerTextureMap {
         walkingMap = new HashMap<String, Animation<TextureRegion>>();
         standingMap = new HashMap<String, TextureRegion>();
 
-        walkingMap.put(Direction.North.toString(), atlas.findAnimation("crono/walking/north", 22, 1, 35, 1));
-        walkingMap.put(Direction.South.toString(), atlas.findAnimation("crono/walking/south", 22, 1, 35, 1));
-        walkingMap.put(Direction.East.toString(), atlas.findAnimation("crono/walking/east", 22, 1, 35, 1));
-        walkingMap.put(Direction.West.toString(), atlas.findAnimation("crono/walking/west", 22, 1, 35, 1));
+        walkingMap.put(Direction.North.toString(), atlas.findAnimation("crono/walking/north", 22 * 6, 6, 35, 1));
+        walkingMap.put(Direction.South.toString(), atlas.findAnimation("crono/walking/south", 22 * 6, 6, 35, 1));
+        walkingMap.put(Direction.East.toString(), atlas.findAnimation("crono/walking/east", 22 * 6, 6, 35, 1));
+        walkingMap.put(Direction.West.toString(), atlas.findAnimation("crono/walking/west", 22 * 6, 6, 35, 1));
 
         standingMap.put(Direction.North.toString(), atlas.findRegion("crono/standing/north"));
         standingMap.put(Direction.South.toString(), atlas.findRegion("crono/standing/south"));
