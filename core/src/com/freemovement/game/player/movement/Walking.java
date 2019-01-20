@@ -8,26 +8,26 @@ public class Walking implements MovementState {
 
     @Override
     public TextureRegion getFrame(MovementData data) {
-        return data.textureMap.getWalking(data.direction).getKeyFrame(data.stateTimer, true);
+        return data.textureMap.getStanding(data.direction);
     }
 
     @Override
     public void moveNorth(Player player) {
-        player.getBody().setLinearVelocity(0, walkSpeed);
+        player.getBody().setLinearVelocity(0, 100);
     }
 
     @Override
     public void moveSouth(Player player) {
-        player.getBody().setLinearVelocity(0, -walkSpeed);
+        player.getBody().setLinearVelocity(0, -100);
     }
 
     @Override
     public void moveEast(Player player) {
-        player.getBody().setLinearVelocity(walkSpeed, 0);
+        player.getBody().setLinearVelocity(100, 0);
     }
 
     @Override
     public void moveWest(Player player) {
-        player.getBody().setLinearVelocity(-walkSpeed, 0);
+        player.getBody().setLinearVelocity(-100, 0);
     }
 }

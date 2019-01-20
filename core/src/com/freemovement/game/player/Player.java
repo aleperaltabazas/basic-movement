@@ -38,13 +38,12 @@ public class Player extends Sprite {
     }
 
     private void createBody() {
-        Vector2 center = new Vector2(getX() + FreeMovementGame.TILE_WIDTH / 2, getY() + FreeMovementGame.TILE_HEIGHT);
+        Vector2 center = new Vector2(getX() + FreeMovementGame.TILE_WIDTH / 2, getY() + FreeMovementGame.TILE_HEIGHT / 2);
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(center);
-        bodyDef.type = BodyDef.BodyType.KinematicBody;
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
 
         body = screen.getWorld().createBody(bodyDef);
-
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(center.x, center.y, center, 0);
@@ -102,9 +101,7 @@ public class Player extends Sprite {
     }
 
     private void updatePosition(float delta) {
-        float x = body.getLinearVelocity().x * delta;
-        float y = body.getLinearVelocity().y * delta;
-        setPosition(x, y);
+        setPosition(body.getPosition().x, body.getPosition().y);
     }
 
     public Body getBody() {
