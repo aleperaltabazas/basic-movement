@@ -1,15 +1,16 @@
 package com.basic.movement.screen;
 
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.basic.movement.BasicMovementGame;
-import com.basic.movement.world.WorldMap;
+import com.basic.movement.utils.TextureAtlasAdapter;
 
 public abstract class AbstractScreen implements Screen {
     protected BasicMovementGame game;
+    private TextureAtlasAdapter atlas;
 
-    public AbstractScreen(BasicMovementGame game) {
+    public AbstractScreen(BasicMovementGame game, String atlasName) {
         this.game = game;
+        this.atlas = new TextureAtlasAdapter(atlasName);
     }
 
     @Override
@@ -42,6 +43,8 @@ public abstract class AbstractScreen implements Screen {
 
     }
 
-    public abstract TextureAtlas getAtlas();
+    public TextureAtlasAdapter getAtlas() {
+        return atlas;
+    }
 
 }

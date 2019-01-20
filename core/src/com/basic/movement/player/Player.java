@@ -4,10 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.basic.movement.player.movement.MovementState;
-import com.basic.movement.player.movement.Running;
-import com.basic.movement.player.movement.Standing;
-import com.basic.movement.player.movement.Walking;
+import com.badlogic.gdx.math.Vector2;
+import com.basic.movement.player.movementState.MovementState;
+import com.basic.movement.player.movementState.Running;
+import com.basic.movement.player.movementState.Standing;
+import com.basic.movement.player.movementState.Walking;
 import com.basic.movement.screen.AbstractScreen;
 import com.basic.movement.utils.PlayerTextureMap;
 
@@ -24,6 +25,8 @@ public class Player extends Sprite {
 
     private MovementState movementState;
     private Direction direction;
+    private Gender gender;
+
     private float stateTimer;
 
     private float speedX = 0;
@@ -41,6 +44,8 @@ public class Player extends Sprite {
     private float virtualTargetPosition;
     private boolean virtualMovement = false;
 
+    private Vector2 position;
+
     public Player(AbstractScreen screen, int walkWidth, int walkHeight, int runWidth, int runHeight) {
         super(screen.getAtlas().findRegion("standing/south"));
         this.screen = screen;
@@ -48,50 +53,20 @@ public class Player extends Sprite {
         stateTimer = 0;
         direction = Direction.South;
         movementState = new Standing();
+        gender = Gender.Male;
 
         targetX = getX();
         targetY = getY();
+
+        position = new Vector2(getX(), getY());
 
         this.WALKING_WIDTH = walkWidth;
         this.WALKING_HEIGHT = walkHeight;
         this.RUNNING_WIDTH = runWidth;
         this.RUNNING_HEIGHT = runHeight;
 
-        textureMap = new PlayerTextureMap();
-
-        textureMap.putWalking(Direction.North, fillFromAtlas("walking/north", this.WALKING_WIDTH, 4, this.WALKING_HEIGHT, 1));
-        textureMap.putWalking(Direction.South, fillFromAtlas("walking/south", this.WALKING_WIDTH, 4, this.WALKING_HEIGHT, 1));
-        textureMap.putWalking(Direction.West, fillFromAtlas("walking/west", this.WALKING_WIDTH, 4, this.WALKING_HEIGHT, 1));
-        textureMap.putWalking(Direction.East, fillFromAtlas("walking/east", this.WALKING_WIDTH, 4, this.WALKING_HEIGHT, 1));
-
-        textureMap.putRunning(Direction.South, fillFromAtlas("running/south", this.RUNNING_WIDTH, 4, this.RUNNING_HEIGHT, 1));
-        textureMap.putRunning(Direction.North, fillFromAtlas("running/north", this.RUNNING_WIDTH, 4, this.RUNNING_HEIGHT, 1));
-        textureMap.putRunning(Direction.West, fillFromAtlas("running/west", this.RUNNING_WIDTH, 4, this.RUNNING_HEIGHT, 1));
-        textureMap.putRunning(Direction.East, fillFromAtlas("running/east", this.RUNNING_WIDTH, 4, this.RUNNING_HEIGHT, 1));
-
-        textureMap.putStanding(Direction.South, screen.getAtlas().findRegion("standing/south"));
-        textureMap.putStanding(Direction.North, screen.getAtlas().findRegion("standing/north"));
-        textureMap.putStanding(Direction.West, screen.getAtlas().findRegion("standing/west"));
-        textureMap.putStanding(Direction.East, screen.getAtlas().findRegion("standing/east"));
-
+        textureMap = new PlayerTextureMap(screen.getAtlas());
         currentTexture = getFrame(0);
-    }
-
-    private Animation<TextureRegion> fillFromAtlas(String regionName, int width, int columns, int height, int rows) {
-        TextureRegion region = screen.getAtlas().findRegion(regionName);
-        TextureRegion[][] temp = region.split(width / columns, height / rows);
-
-        TextureRegion[] frames = new TextureRegion[temp.length * temp[0].length];
-
-        int index = 0;
-
-        for (TextureRegion[] textureRegions : temp) {
-            for (TextureRegion textureRegion : textureRegions) {
-                frames[index++] = textureRegion;
-            }
-        }
-
-        return new Animation<>(0.16f, frames);
     }
 
     public void update(float delta) {
@@ -103,7 +78,7 @@ public class Player extends Sprite {
     public TextureRegion getFrame(float delta) {
         stateTimer += delta;
 
-        return currentTexture = movementState.getFrame(this.textureMap, this.direction, this.stateTimer);
+        return currentTexture = movementState.getFrame(this.textureMap, this.direction, this.gender, this.stateTimer);
     }
 
     private void walk() {
@@ -274,5 +249,11 @@ public class Player extends Sprite {
 
     public Direction getDirection() {
         return this.direction;
+    }
+
+    @Override
+    public void setPosition(float x, float y) {
+        super.setPosition(x, y);
+        position.set(x, y);
     }
 }

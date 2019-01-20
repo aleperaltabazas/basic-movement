@@ -1,6 +1,8 @@
-package com.basic.movement.utils;
+package com.basic.movement.movement;
 
-import com.basic.movement.player.*;
+import com.basic.movement.player.ActorPlayer;
+import com.basic.movement.player.Direction;
+import com.basic.movement.player.Player;
 import com.basic.movement.world.WorldMap;
 
 public class MovementManager {

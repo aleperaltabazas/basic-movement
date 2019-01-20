@@ -1,28 +1,30 @@
 package com.basic.movement.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.graphics.glutils.*;
-import com.badlogic.gdx.maps.*;
-import com.badlogic.gdx.maps.objects.*;
-import com.badlogic.gdx.maps.tiled.*;
-import com.badlogic.gdx.maps.tiled.renderers.*;
-import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.*;
-import com.basic.movement.*;
-import com.basic.movement.player.*;
-import com.basic.movement.scene.*;
-import com.basic.movement.utils.*;
-import com.basic.movement.world.*;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.basic.movement.BasicMovementGame;
+import com.basic.movement.movement.MovementManager;
+import com.basic.movement.movement.MovementObserver;
+import com.basic.movement.player.ActorPlayer;
+import com.basic.movement.player.Player;
+import com.basic.movement.scene.Hud;
 import com.basic.movement.world.Readable;
+import com.basic.movement.world.*;
 
 import java.lang.reflect.Constructor;
 
 public class SceneScreen extends AbstractScreen {
-
-    private TextureAtlas atlas;
     private Player player;
     private OrthographicCamera camera;
     private Hud hud;
@@ -39,48 +41,42 @@ public class SceneScreen extends AbstractScreen {
     private Stage stage;
 
     public SceneScreen(BasicMovementGame game) {
-        super(game);
-    }
-
-    public TextureAtlas getAtlas() {
-        return this.atlas;
+        super(game, "output/brendan.atlas");
     }
 
     @Override
     public void show() {
-        atlas = new TextureAtlas("output/brendan.atlas");
-
-        initializeMap();
-        initializeHUD();
-        initializeMovement();
-        initializePlayer();
-        initializeCamera();
-        initializeActors();
+        loadMap();
+        loadHUD();
+        loadMovement();
+        loadPlayer();
+        loadCamera();
+        loadActors();
     }
 
-    private void initializeActors() {
+    private void loadActors() {
         actorPlayer = new ActorPlayer(player);
         stage = new Stage(viewport);
 
         stage.addActor(actorPlayer);
     }
 
-    private void initializeHUD() {
+    private void loadHUD() {
         hud = new Hud(game.getBatch());
     }
 
-    private void initializeMovement() {
+    private void loadMovement() {
         movementManager = new MovementManager(16, 16, new MovementObserver(worldMap, hud));
         Gdx.input.setInputProcessor(movementManager.getInput());
     }
 
-    private void initializePlayer() {
+    private void loadPlayer() {
         player = new Player(this, 56, 21, 60, 21);
         player.setPosition(128, 64);
         player.setTargetPosition(128, 64);
     }
 
-    private void initializeCamera() {
+    private void loadCamera() {
         camera = new OrthographicCamera(Gdx.graphics.getHeight(), Gdx.graphics.getHeight());
         viewport = new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
         camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
@@ -88,8 +84,8 @@ public class SceneScreen extends AbstractScreen {
         shaper = new ShapeRenderer();
     }
 
-    private void initializeMap() {
-        worldMap = new WorldMap();
+    private void loadMap() {
+        worldMap = new WorldMap(player);
 
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("maps/town.tmx");

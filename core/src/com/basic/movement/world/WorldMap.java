@@ -8,10 +8,11 @@ import java.util.Map;
 
 public class WorldMap {
     private Map<Vector2, InteractiveTile> tileMap;
-    private Vector2 playerPosition;
+    private Player player;
 
-    public WorldMap() {
-        tileMap = new HashMap<>();
+    public WorldMap(Player player) {
+        this.tileMap = new HashMap<>();
+        this.player = player;
     }
 
     public void addTile(float x, float y, InteractiveTile tile) {
@@ -24,10 +25,6 @@ public class WorldMap {
 
         return false;
 
-    }
-
-    public void setPlayerPosition(Player player) {
-        this.playerPosition = new Vector2(player.getX(), player.getY());
     }
 
     public void interactWithTile(float x, float y) {

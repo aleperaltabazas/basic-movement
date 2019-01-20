@@ -3,7 +3,6 @@ package com.basic.movement.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -14,18 +13,16 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.basic.movement.BasicMovementGame;
-import com.basic.movement.player.MovementObserver;
+import com.basic.movement.movement.MovementManager;
+import com.basic.movement.movement.MovementObserver;
 import com.basic.movement.player.Player;
 import com.basic.movement.scene.Hud;
-import com.basic.movement.utils.MovementManager;
-import com.basic.movement.world.*;
 import com.basic.movement.world.Readable;
+import com.basic.movement.world.*;
 
 import java.lang.reflect.Constructor;
 
 public class GridMovementScreen extends AbstractScreen {
-
-    private TextureAtlas atlas;
     private Player player;
     private OrthographicCamera camera;
     private Hud hud;
@@ -39,17 +36,11 @@ public class GridMovementScreen extends AbstractScreen {
     private MovementManager movementManager;
 
     public GridMovementScreen(BasicMovementGame game) {
-        super(game);
-    }
-
-    public TextureAtlas getAtlas() {
-        return this.atlas;
+        super(game, "output/brendan.atlas");
     }
 
     @Override
     public void show() {
-        atlas = new TextureAtlas("output/brendan.atlas");
-
         initializeMap();
         initializeActors();
         initializeMovement();
@@ -81,7 +72,7 @@ public class GridMovementScreen extends AbstractScreen {
     }
 
     private void initializeMap() {
-        worldMap = new WorldMap();
+        worldMap = new WorldMap(player);
 
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("maps/town.tmx");

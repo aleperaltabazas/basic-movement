@@ -1,5 +1,6 @@
-package com.basic.movement.player;
+package com.basic.movement.movement;
 
+import com.basic.movement.player.Player;
 import com.basic.movement.scene.Hud;
 import com.basic.movement.world.WorldMap;
 
@@ -13,7 +14,6 @@ public class MovementObserver {
     }
 
     public void actOnMovement(Player player) {
-        worldMap.setPlayerPosition(player);
         hud.update(player);
     }
 }
