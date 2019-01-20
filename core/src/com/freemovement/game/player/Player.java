@@ -2,6 +2,7 @@ package com.freemovement.game.player;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.freemovement.game.player.movement.MovementData;
 import com.freemovement.game.screen.AbstractScreen;
 import com.freemovement.game.utils.PlayerTextureMap;
 
@@ -13,14 +14,10 @@ public class Player extends Sprite {
     private PlayerTextureMap textureMap;
 
     private Body body;
-    private float stateTimer;
-    private Direction direction;
+    private MovementData movementData;
 
     public Player(AbstractScreen screen) {
         this.screen = screen;
-        this.textureMap = new PlayerTextureMap(screen.getAtlas());
-
-        this.direction = South;
-        this.stateTimer = 0;
+        this.movementData = new MovementData(0, South, screen.getAtlas());
     }
 }

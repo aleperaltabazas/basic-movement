@@ -1,0 +1,81 @@
+
+crono.png
+size: 128,128
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+crono/idling/south
+  rotate: false
+  xy: 2, 2
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+
+crono2.png
+size: 64,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+crono/standing/east
+  rotate: false
+  xy: 2, 134
+  size: 16, 64
+  orig: 16, 64
+  offset: 0, 0
+  index: -1
+crono/standing/north
+  rotate: false
+  xy: 2, 68
+  size: 16, 64
+  orig: 16, 64
+  offset: 0, 0
+  index: -1
+crono/standing/south
+  rotate: false
+  xy: 20, 134
+  size: 16, 64
+  orig: 16, 64
+  offset: 0, 0
+  index: -1
+crono/standing/west
+  rotate: false
+  xy: 2, 2
+  size: 16, 64
+  orig: 16, 64
+  offset: 0, 0
+  index: -1
+
+crono3.png
+size: 1024,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+crono/walking/east
+  rotate: false
+  xy: 2, 134
+  size: 256, 64
+  orig: 256, 64
+  offset: 0, 0
+  index: -1
+crono/walking/north
+  rotate: false
+  xy: 2, 68
+  size: 256, 64
+  orig: 256, 64
+  offset: 0, 0
+  index: -1
+crono/walking/south
+  rotate: false
+  xy: 260, 134
+  size: 256, 64
+  orig: 256, 64
+  offset: 0, 0
+  index: -1
+crono/walking/west
+  rotate: false
+  xy: 2, 2
+  size: 256, 64
+  orig: 256, 64
+  offset: 0, 0
+  index: -1
