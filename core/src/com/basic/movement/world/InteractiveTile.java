@@ -27,4 +27,6 @@ public abstract class InteractiveTile extends Actor {
     public void interact() {
 
     }
+
+    public abstract void step();
 }

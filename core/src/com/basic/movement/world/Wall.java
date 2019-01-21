@@ -9,4 +9,9 @@ public class Wall extends InteractiveTile {
     public Wall(WorldMap world, TiledMap map, Rectangle bounds) {
         super(world, map, bounds);
     }
+
+    @Override
+    public void step() {
+        throw new RuntimeException("Should not be able to stand here");
+    }
 }

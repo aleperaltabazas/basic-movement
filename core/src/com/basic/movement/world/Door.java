@@ -9,4 +9,9 @@ public class Door extends InteractiveTile {
     public Door(WorldMap worldMap, TiledMap map, Rectangle bounds) {
         super(worldMap, map, bounds);
     }
+
+    @Override
+    public void step() {
+
+    }
 }

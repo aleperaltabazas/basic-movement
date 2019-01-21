@@ -38,4 +38,12 @@ public class WorldMap {
     private boolean existsTile(float x, float y) {
         return tileMap.containsKey(new Vector2(x, y));
     }
+
+    public void stepOnTile(float x, float y) {
+        Vector2 position = new Vector2(x, y);
+
+        if (existsTile(x, y)) {
+            tileMap.get(position).step();
+        }
+    }
 }

@@ -9,4 +9,9 @@ public class Ocean extends InteractiveTile {
     public Ocean(WorldMap world, TiledMap map, Rectangle bounds) {
         super(world, map, bounds);
     }
+
+    @Override
+    public void step() {
+
+    }
 }

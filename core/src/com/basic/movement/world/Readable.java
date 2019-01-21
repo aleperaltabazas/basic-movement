@@ -14,4 +14,9 @@ public class Readable extends InteractiveTile {
     public void interact() {
         System.out.println("Interacted");
     }
+
+    @Override
+    public void step() {
+
+    }
 }

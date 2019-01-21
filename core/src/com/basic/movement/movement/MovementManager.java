@@ -51,8 +51,10 @@ public class MovementManager {
                 if (east) {
                     if (worldMap.isOccupied(playerSprite.getX() + TILE_WIDTH, playerSprite.getY()))
                         playerSprite.walkInPlace(Direction.East);
-                    else
+                    else{
                         playerSprite.setTargetX(playerSprite.getX() + TILE_WIDTH);
+                        worldMap.stepOnTile(playerSprite.getX() + TILE_WIDTH, playerSprite.getY());
+                    }
                 } else if (west) {
                     if (worldMap.isOccupied(playerSprite.getX() - TILE_WIDTH, playerSprite.getY()))
                         playerSprite.walkInPlace(Direction.West);
