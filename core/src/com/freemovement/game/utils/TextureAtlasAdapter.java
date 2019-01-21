@@ -13,12 +13,13 @@ public class TextureAtlasAdapter extends TextureAtlas {
         TextureRegion region = findRegion(regionName);
         TextureRegion[][] temp = region.split(width / cols, height / rows);
 
-        TextureRegion[] frames = new TextureRegion[temp.length * temp[0].length];
+        TextureRegion[] frames = new TextureRegion[cols * rows];
+        
         int index = 0;
 
-        for (TextureRegion[] textureRegions : temp) {
-            for (TextureRegion textureRegion : textureRegions) {
-                frames[index++] = textureRegion;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                frames[index++] = temp[i][j];
             }
         }
 
