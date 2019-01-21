@@ -41,7 +41,7 @@ public class SceneScreen extends AbstractScreen {
     private Stage stage;
 
     public SceneScreen(BasicMovementGame game) {
-        super(game, "output/brendan.atlas");
+        super(game, "packed/brendan.atlas");
     }
 
     @Override

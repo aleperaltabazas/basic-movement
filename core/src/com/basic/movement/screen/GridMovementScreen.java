@@ -36,7 +36,7 @@ public class GridMovementScreen extends AbstractScreen {
     private MovementManager movementManager;
 
     public GridMovementScreen(BasicMovementGame game) {
-        super(game, "output/brendan.atlas");
+        super(game, "packed/brendan.atlas");
     }
 
     @Override
