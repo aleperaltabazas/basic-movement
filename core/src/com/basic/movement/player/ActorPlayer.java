@@ -1,20 +1,19 @@
 package com.basic.movement.player;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class ActorPlayer extends Actor {
-    private Player sprite;
+    private PlayerSprite sprite;
     private TextureRegion currentFrame;
 
-    public ActorPlayer(Player player) {
-        sprite = player;
+    public ActorPlayer(PlayerSprite playerSprite) {
+        sprite = playerSprite;
 
-        currentFrame = new TextureRegion(new Texture("may/standing/south.png"), 14, 20);
+        currentFrame = new TextureRegion(playerSprite.getRegion());
         setSize(14, 20);
-        setPosition(player.getX(), player.getY());
+        setPosition(playerSprite.getX(), playerSprite.getY());
     }
 
     @Override
@@ -30,24 +29,28 @@ public class ActorPlayer extends Actor {
     @Override
     public void act(float delta) {
         super.act(delta);
-        sprite.update(delta);
+        updatePosition(delta);
+        updateFrame();
+    }
+
+    private void updateFrame() {
         currentFrame = sprite.getRegion();
         setSize(currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
-        setPosition(sprite.getX(), sprite.getY());
         setOrigin(sprite.getOriginX(), sprite.getOriginY());
         setScale(sprite.getScaleX(), sprite.getScaleY());
         setRotation(sprite.getRotation());
     }
 
-    public void walkNorth() {
-        sprite.moveNorth();
+    private void updatePosition(float delta) {
+        sprite.update(delta);
+        setPosition(sprite.getX(), sprite.getY());
     }
 
     public void setTargetPosition(float x, float y) {
         sprite.setTargetPosition(x, y);
     }
 
-    public Player getSprite() {
+    public PlayerSprite getSprite() {
         return sprite;
     }
 }

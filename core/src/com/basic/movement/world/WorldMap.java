@@ -1,18 +1,18 @@
 package com.basic.movement.world;
 
 import com.badlogic.gdx.math.Vector2;
-import com.basic.movement.player.Player;
+import com.basic.movement.player.PlayerSprite;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class WorldMap {
     private Map<Vector2, InteractiveTile> tileMap;
-    private Player player;
+    private PlayerSprite playerSprite;
 
-    public WorldMap(Player player) {
+    public WorldMap(PlayerSprite playerSprite) {
         this.tileMap = new HashMap<>();
-        this.player = player;
+        this.playerSprite = playerSprite;
     }
 
     public void addTile(float x, float y, InteractiveTile tile) {

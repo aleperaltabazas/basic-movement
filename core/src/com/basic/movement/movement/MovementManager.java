@@ -2,7 +2,7 @@ package com.basic.movement.movement;
 
 import com.basic.movement.player.ActorPlayer;
 import com.basic.movement.player.Direction;
-import com.basic.movement.player.Player;
+import com.basic.movement.player.PlayerSprite;
 import com.basic.movement.world.WorldMap;
 
 public class MovementManager {
@@ -26,7 +26,7 @@ public class MovementManager {
         manage(actor.getSprite(), worldMap);
     }
 
-    public void manage(Player player, WorldMap worldMap) {
+    public void manage(PlayerSprite playerSprite, WorldMap worldMap) {
         boolean west = manager.isMovingWest();
         boolean east = manager.isMovingEast();
         boolean shouldMoveEastWest = (west != east);
@@ -40,45 +40,45 @@ public class MovementManager {
         boolean interacting = manager.isInteracting();
 
         if (interacting) {
-            float x = player.getX() + player.getDirection().getFacingX(), y = player.getY() + player.getDirection().getFacingY();
+            float x = playerSprite.getX() + playerSprite.getDirection().getFacingX(), y = playerSprite.getY() + playerSprite.getDirection().getFacingY();
 
             worldMap.interactWithTile(x, y);
         } else {
-            if (!player.isMoving() && shouldMoveEastWest) {
-                player.setMoving(true);
-                player.setRunning(running);
+            if (!playerSprite.isMoving() && shouldMoveEastWest) {
+                playerSprite.setMoving(true);
+                playerSprite.setRunning(running);
 
                 if (east) {
-                    if (worldMap.isOccupied(player.getX() + TILE_WIDTH, player.getY()))
-                        player.walkInPlace(Direction.East);
+                    if (worldMap.isOccupied(playerSprite.getX() + TILE_WIDTH, playerSprite.getY()))
+                        playerSprite.walkInPlace(Direction.East);
                     else
-                        player.setTargetX(player.getX() + TILE_WIDTH);
+                        playerSprite.setTargetX(playerSprite.getX() + TILE_WIDTH);
                 } else if (west) {
-                    if (worldMap.isOccupied(player.getX() - TILE_WIDTH, player.getY()))
-                        player.walkInPlace(Direction.West);
+                    if (worldMap.isOccupied(playerSprite.getX() - TILE_WIDTH, playerSprite.getY()))
+                        playerSprite.walkInPlace(Direction.West);
                     else
-                        player.setTargetX(player.getX() - TILE_WIDTH);
+                        playerSprite.setTargetX(playerSprite.getX() - TILE_WIDTH);
                 }
-            } else if (!player.isMoving() && shouldMoveSouthNorth) {
-                player.setMoving(true);
-                player.setRunning(running);
+            } else if (!playerSprite.isMoving() && shouldMoveSouthNorth) {
+                playerSprite.setMoving(true);
+                playerSprite.setRunning(running);
 
                 if (north) {
-                    if (worldMap.isOccupied(player.getX(), player.getY() + TILE_HEIGHT))
-                        player.walkInPlace(Direction.North);
+                    if (worldMap.isOccupied(playerSprite.getX(), playerSprite.getY() + TILE_HEIGHT))
+                        playerSprite.walkInPlace(Direction.North);
                     else
-                        player.setTargetY(player.getY() + TILE_HEIGHT);
+                        playerSprite.setTargetY(playerSprite.getY() + TILE_HEIGHT);
                 } else if (south) {
-                    if (worldMap.isOccupied(player.getX(), player.getY() - TILE_HEIGHT))
-                        player.walkInPlace(Direction.South);
+                    if (worldMap.isOccupied(playerSprite.getX(), playerSprite.getY() - TILE_HEIGHT))
+                        playerSprite.walkInPlace(Direction.South);
                     else
-                        player.setTargetY(player.getY() - TILE_HEIGHT);
+                        playerSprite.setTargetY(playerSprite.getY() - TILE_HEIGHT);
                 }
             } else {
-                player.stopMovement();
+                playerSprite.stopMovement();
             }
 
-            movementObserver.actOnMovement(player);
+            movementObserver.actOnMovement(playerSprite);
         }
     }
 

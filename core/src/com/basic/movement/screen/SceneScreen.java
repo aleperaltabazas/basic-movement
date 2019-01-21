@@ -17,7 +17,7 @@ import com.basic.movement.BasicMovementGame;
 import com.basic.movement.movement.MovementManager;
 import com.basic.movement.movement.MovementObserver;
 import com.basic.movement.player.ActorPlayer;
-import com.basic.movement.player.Player;
+import com.basic.movement.player.PlayerSprite;
 import com.basic.movement.scene.Hud;
 import com.basic.movement.world.Readable;
 import com.basic.movement.world.*;
@@ -25,7 +25,7 @@ import com.basic.movement.world.*;
 import java.lang.reflect.Constructor;
 
 public class SceneScreen extends AbstractScreen {
-    private Player player;
+    private PlayerSprite playerSprite;
     private OrthographicCamera camera;
     private Hud hud;
     private TmxMapLoader mapLoader;
@@ -55,7 +55,7 @@ public class SceneScreen extends AbstractScreen {
     }
 
     private void loadActors() {
-        actorPlayer = new ActorPlayer(player);
+        actorPlayer = new ActorPlayer(playerSprite);
         stage = new Stage(viewport);
 
         stage.addActor(actorPlayer);
@@ -71,9 +71,9 @@ public class SceneScreen extends AbstractScreen {
     }
 
     private void loadPlayer() {
-        player = new Player(this, 56, 21, 60, 21);
-        player.setPosition(128, 64);
-        player.setTargetPosition(128, 64);
+        playerSprite = new PlayerSprite(this, 56, 21, 60, 21);
+        playerSprite.setPosition(128, 64);
+        playerSprite.setTargetPosition(128, 64);
     }
 
     private void loadCamera() {
@@ -85,7 +85,7 @@ public class SceneScreen extends AbstractScreen {
     }
 
     private void loadMap() {
-        worldMap = new WorldMap(player);
+        worldMap = new WorldMap(playerSprite);
 
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("maps/town.tmx");
@@ -114,7 +114,7 @@ public class SceneScreen extends AbstractScreen {
     private void renderBatch() {
         game.getBatch().setProjectionMatrix(stage.getCamera().combined);
         game.getBatch().begin();
-        player.draw(game.getBatch());
+        playerSprite.draw(game.getBatch());
         game.getBatch().end();
     }
 
@@ -151,7 +151,7 @@ public class SceneScreen extends AbstractScreen {
     private void update(float delta) {
         movementManager.manage(actorPlayer, worldMap);
 
-        hud.update(player);
+        hud.update(playerSprite);
         stage.getCamera().position.set(actorPlayer.getX(), actorPlayer.getY(), 0);
         stage.getCamera().update();
     }

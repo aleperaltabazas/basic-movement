@@ -1,6 +1,6 @@
 package com.basic.movement.movement;
 
-import com.basic.movement.player.Player;
+import com.basic.movement.player.PlayerSprite;
 import com.basic.movement.scene.Hud;
 import com.basic.movement.world.WorldMap;
 
@@ -13,7 +13,7 @@ public class MovementObserver {
         this.hud = hud;
     }
 
-    public void actOnMovement(Player player) {
-        hud.update(player);
+    public void actOnMovement(PlayerSprite playerSprite) {
+        hud.update(playerSprite);
     }
 }

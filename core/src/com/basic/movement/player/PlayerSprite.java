@@ -1,7 +1,6 @@
 package com.basic.movement.player;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -12,7 +11,7 @@ import com.basic.movement.player.movementState.Walking;
 import com.basic.movement.screen.AbstractScreen;
 import com.basic.movement.utils.PlayerTextureMap;
 
-public class Player extends Sprite {
+public class PlayerSprite extends Sprite {
     private AbstractScreen screen;
 
     private PlayerTextureMap textureMap;
@@ -46,7 +45,7 @@ public class Player extends Sprite {
 
     private Vector2 position;
 
-    public Player(AbstractScreen screen, int walkWidth, int walkHeight, int runWidth, int runHeight) {
+    public PlayerSprite(AbstractScreen screen, int walkWidth, int walkHeight, int runWidth, int runHeight) {
         super(screen.getAtlas().findRegion("standing/south"));
         this.screen = screen;
 
@@ -255,5 +254,26 @@ public class Player extends Sprite {
     public void setPosition(float x, float y) {
         super.setPosition(x, y);
         position.set(x, y);
+    }
+
+    public void reface(Direction direction) {
+        if (!virtualMovement) {
+            virtualMovement = true;
+            this.movementState = new Walking();
+            virtualPosition = 0;
+            virtualTargetPosition = 3;
+            this.direction = direction;
+            setTargetPosition(getX(), getY());
+        }
+
+        float delta = Gdx.graphics.getDeltaTime();
+        virtualPosition += virtualSpeed * delta;
+
+        if (virtualPosition + 1 > virtualTargetPosition) {
+            moving = false;
+            virtualTargetPosition = 0;
+            virtualPosition = 0;
+            virtualMovement = false;
+        }
     }
 }

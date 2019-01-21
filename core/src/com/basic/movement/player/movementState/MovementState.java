@@ -3,17 +3,17 @@ package com.basic.movement.player.movementState;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.basic.movement.player.Direction;
 import com.basic.movement.player.Gender;
-import com.basic.movement.player.Player;
+import com.basic.movement.player.PlayerSprite;
 import com.basic.movement.utils.PlayerTextureMap;
 
 public interface MovementState {
-    public void moveNorth(Player player);
+    void moveNorth(PlayerSprite playerSprite);
 
-    public void moveSouth(Player player);
+    void moveSouth(PlayerSprite playerSprite);
 
-    public void moveEast(Player player);
+    void moveEast(PlayerSprite playerSprite);
 
-    public void moveWest(Player player);
+    void moveWest(PlayerSprite playerSprite);
 
-    public TextureRegion getFrame(PlayerTextureMap map, Direction direction, Gender gender, float stateTimer);
+    TextureRegion getFrame(PlayerTextureMap map, Direction direction, Gender gender, float stateTimer);
 }

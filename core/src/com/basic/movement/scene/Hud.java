@@ -43,9 +43,9 @@ public class Hud {
         return stage;
     }
 
-    public void update(Player player) {
-        xLabel.setText(String.format("%.2f", x = player.getX()));
-        yLabel.setText(String.format("%.2f", y = player.getY()));
+    public void update(PlayerSprite playerSprite) {
+        xLabel.setText(String.format("%.2f", x = playerSprite.getX()));
+        yLabel.setText(String.format("%.2f", y = playerSprite.getY()));
     }
 
     public void update(ActorPlayer actor) {
