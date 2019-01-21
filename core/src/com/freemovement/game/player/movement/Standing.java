@@ -11,6 +11,7 @@ public class Standing implements MovementState {
 
     @Override
     public void moveNorth(Player player) {
+
     }
 
     @Override

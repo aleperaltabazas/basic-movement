@@ -41,7 +41,7 @@ public class Player extends Sprite {
         Vector2 center = new Vector2(getX() + FreeMovementGame.TILE_WIDTH / 2, getY() + FreeMovementGame.TILE_HEIGHT / 2);
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(center);
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.type = BodyDef.BodyType.KinematicBody;
 
         body = screen.getWorld().createBody(bodyDef);
         FixtureDef fixtureDef = new FixtureDef();
@@ -106,5 +106,17 @@ public class Player extends Sprite {
 
     public Body getBody() {
         return this.body;
+    }
+
+    public void setSpeed(float speedX, float speedY) {
+        body.setLinearVelocity(speedX, speedY);
+    }
+
+    public float getSpeedX() {
+        return body.getLinearVelocity().x;
+    }
+
+    public float getSpeedY() {
+        return body.getLinearVelocity().y;
     }
 }

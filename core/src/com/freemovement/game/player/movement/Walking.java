@@ -13,21 +13,21 @@ public class Walking implements MovementState {
 
     @Override
     public void moveNorth(Player player) {
-        player.getBody().setLinearVelocity(0, 100);
+        player.setSpeed(player.getSpeedX(), walkSpeed);
     }
 
     @Override
     public void moveSouth(Player player) {
-        player.getBody().setLinearVelocity(0, -100);
+        player.getBody().setLinearVelocity(player.getSpeedX(), -walkSpeed);
     }
 
     @Override
     public void moveEast(Player player) {
-        player.getBody().setLinearVelocity(100, 0);
+        player.getBody().setLinearVelocity(walkSpeed, player.getSpeedY());
     }
 
     @Override
     public void moveWest(Player player) {
-        player.getBody().setLinearVelocity(-100, 0);
+        player.getBody().setLinearVelocity(-walkSpeed, player.getSpeedY());
     }
 }
